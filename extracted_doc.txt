@@ -1,0 +1,981 @@
+DESIGN OF A CLOUD-BASED ARTIFICIAL INTELLIGENCE PROTOTYPE SYSTEM FOR EARLY CATARACT DETECTION
+
+BY
+LUKWAGO DANIEL
+BSc. COMPUTER SCIENCE
+2300101370
+2023/AUG/BCS/B234152/DAY
+A Field Attachment Report Submitted to the Department of Computer Science in Partial Fulfillment of the Requirements for the Award of Bachelor of Science in Computer Science
+SUPERVISOR: MS. MUSIIME PHIONAH
+MAY 2026
+
+DECLARATION
+I, Lukwago Daniel, declare that this research project titled "Design of a Cloud-Based Artificial Intelligence Prototype System for Early Cataract Detection" is my original work and has not been submitted for any academic award in any university or institution of higher learning. Where the work of others has been used, proper acknowledgment has been made.
+Student 
+Name: Lukwago Daniel
+Signature: ________________
+Date: ________________
+
+APPROVAL
+This field attachment report has been submitted for examination with my approval as the university supervisor.
+Supervisor Name: Ms. Musiime Phiona
+Signature: ________________
+Date: ________________
+
+DEDICATION
+I dedicate this work to my family and friends for their unwavering support and encouragement throughout my academic journey.
+
+ACKNOWLEDGMENTS
+I would like to express my sincere gratitude to my supervisor, Ms. Musiime Phiona, for her invaluable guidance, patience, and constructive feedback throughout this project. Her expertise and insights were instrumental in shaping this research.
+I am grateful to the Department of Computer Science faculty members for their academic support and to my fellow students for their encouragement and collaboration. Finally, I thank my family for their continuous support and belief in my abilities.
+
+TABLE OF CONTENTS
+
+DECLARATION	II
+APPROVAL	III
+DEDICATION	IV
+ACKNOWLEDGMENTS	V
+TABLE OF CONTENTS	VI
+LIST OF ACRONYMS AND ABBREVIATIONS	VIII
+ABSTRACT	IX
+CHAPTER ONE	1
+1.INTRODUCTION	1
+1.1 Background of the Study	1
+1.1.1 Global Perspective	1
+1.1.2 Regional Perspective (Africa)	1
+1.1.3 National Perspective (Uganda)	1
+1.1.4 Specific Case Study (Kampala, Uganda)	2
+1.2 Problem Statement	3
+1.3 Purpose of the Study	3
+1.4 Objectives of the Study	3
+1.4.1 General Objective	3
+1.4.2 Specific Objectives	3
+1.5 Scope of the Study	4
+1.5.1 Geographical Scope	4
+1.5.2 Content Scope	4
+1.5.3 Time Scope	5
+1.6 Significance of the Study	5
+CHAPTER TWO	6
+2.1 Introduction	6
+2.2 Cataract Prevalence and Traditional Screening Challenges	6
+2.3 AI Models and Technologies for Cataract Detection	7
+2.4 Existing Mobile Applications for Eye Disease Screening	7
+2.5 Web Applications and Professional Diagnostic Tools	8
+2.6 Cloud Integration and AI Chatbots	8
+2.7 Conceptual Framework	9
+2.9 Research Gaps and Contribution	9
+CHAPTER THREE	10
+3.1 Introduction	10
+3.2 Research Design	10
+3.3 System Development Methodology	11
+3.3.1 Agile Development Methodology	11
+3.3.2 Integration of AI Development Lifecycle	12
+3.4 System Requirements	12
+3.4.1 Functional Requirements	12
+3.4.2 Non-Functional Requirements	13
+3.5 System Architecture and Design	14
+3.5.1 System Architecture Overview	14
+3.6 Tools and Technologies	15
+3.6.1 Mobile Application Development	15
+3.9 System Testing	15
+3.9.1 Unit Testing	15
+3.9.2 Integration Testing	16
+3.9.3 User Acceptance Testing (UAT)	16
+3.10 Ethical Considerations	16
+REFERENCES	17
+APPENDIX	19
+APPENDIX A: PROJECT WORK PLAN	19
+APPENDIX B: PROJECT BUDGET	20
+APPENDIX C: SOFTWARE REQUIREMENTS	22
+APPENDIX D: HARDWARE REQUIREMENTS	24
+APPENDIX E: USER ROLES AND PERMISSIONS	25
+APPENDIX F: INFORMED CONSENT FORM	26
+APPENDIX G: SYSTEM API ENDPOINTS	27
+APPENDIX H: SYSTEM USE CASES	28
+APPENDIX I: RISK ASSESSMENT	29
+APPENDIX J: USER EVALUATION QUESTIONNAIRE	30
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+LIST OF ACRONYMS AND ABBREVIATIONS
+AI - Artificial Intelligence
+API - Application Programming Interface
+CNN - Convolutional Neural Network
+ECSC - Effective Cataract Surgical Coverage
+RAAB - Rapid Assessment of Avoidable Blindness
+VHT - Village Health Team
+WHO - World Health Organization
+
+ABSTRACT
+Cataract remains the leading cause of reversible blindness in Uganda, accounting for nearly 50% of blindness cases among adults over 50 years. Despite its prevalence, early detection remains inconsistent due to limited specialized diagnostic equipment and understaffed health facilities, particularly in Kampala and surrounding peri-urban areas. This study aimed to design and develop a cloud-based artificial intelligence prototype system for early cataract detection using smartphone-captured eye images. The system comprises a mobile application for image capture and a web-based dashboard for healthcare professionals to review screening results and manage referrals.
+The research adopted a design science research methodology combined with agile development principles, enabling iterative development and stakeholder engagement. The prototype leverages transfer learning techniques using pre-trained convolutional neural network models optimized for mobile deployment. System requirements were gathered through literature review and consultation with healthcare professionals. The mobile application was developed for the Android platform, while the web dashboard provides secure role-based access for verified healthcare professionals.
+Key findings demonstrate the feasibility of developing a prototype AI-assisted cataract screening system suitable for community-level deployment. The system successfully integrates smartphone image capture with cloud-based processing, returning preliminary screening results within acceptable timeframes. Usability evaluation indicates positive reception among potential users, particularly community health workers who require accessible screening tools. The study contributes to the growing body of knowledge on mobile health technologies for resource-constrained environments and provides a foundation for future development of clinically validated diagnostic systems.
+
+CHAPTER ONE
+1.INTRODUCTION
+1.1 Background of the Study
+1.1.1 Global Perspective
+Cataract remains the leading cause of reversible blindness worldwide, affecting approximately 94 million people with vision-impairing cataracts as of recent estimates. Globally, the World Health Organization (WHO) reports that untreated cataracts account for about 51% of all cases of blindness, disproportionately impacting low- and middle-income countries where access to surgical services is limited. Advances in artificial intelligence (AI) and smartphone technology have emerged as promising tools for early detection, with mobile applications demonstrating diagnostic accuracies exceeding 90% in controlled studies. For instance, AI-based apps like e-Paarvai have shown sensitivity and specificity around 89-90% for cataract screening using standard smartphone cameras, enabling non-specialist screening in resource-constrained settings.
+1.1.2 Regional Perspective (Africa)
+In sub-Saharan Africa, the prevalence of blindness due to cataracts is estimated at 4-6% among adults aged 50 and older, far exceeding rates in high-income regions. Regional studies highlight smartphone-based screening as a viable solution, with one Kenyan trial showing a threefold increase in eye care uptake through community volunteers using mobile apps. However, challenges such as limited ophthalmic personnel—one ophthalmologist per million people in many areas—persist, underscoring the need for scalable, AI-assisted diagnostic tools.
+1.1.3 National Perspective (Uganda)
+In Uganda, cataract is one of the principal causes of blindness, responsible for nearly 50% of cases among adults over 50 years, with regional variations showing blindness rates as high as 4.9% in Karamoja and 0.9% in Western Uganda. Recent Rapid Assessment of Avoidable Blindness (RAAB) surveys from 2023 indicate that untreated cataract drives 49.4% of bilateral blindness in Western Uganda, while effective cataract surgical coverage (eCSC) languishes at just 7.3% due to poor surgical outcomes and access barriers. From 2020-2024, cataract surgeries constituted the majority of eye procedures at regional referral hospitals, yet a severe shortage of specialists—fewer than 50 ophthalmologists nationwide—leaves millions underserved. Rural and low-income populations, particularly in Central and Northern regions, face the highest burden, exacerbated by low awareness and transportation costs.
+1.1.4 Specific Case Study (Kampala, Uganda)
+Within Kampala and surrounding peri-urban communities, eye clinics frequently experience high demand for screening services during outreach programs. However, early detection remains inconsistent due to reliance on manual assessment methods and limited availability of specialized diagnostic equipment at community level. Introducing a cloud-supported mobile screening prototype that allows both patients and health workers to capture eye images using smartphones may improve early detection and strengthen coordination between community-level screening and professional diagnosis through centralized platforms.
+1.2 Problem Statement
+In Kampala and surrounding Central Region areas, where over 40% of Uganda's population resides, eye care facilities like Mengo Hospital report overwhelming demand during screening camps, yet early detection remains inconsistent due to reliance on manual visual acuity tests by understaffed clinics. Community health workers and Village Health Teams (VHTs), numbering over 20,000 nationwide, lack tools for preliminary cataract screening, leading to late-stage referrals and preventable vision loss. This project addresses this gap by developing a prototype smartphone-based AI application for eye scanning and early cataract detection, deployable by non-specialists in urban and peri-urban Kampala settings.
+1.3 Purpose of the Study
+The purpose of this study is to design, develop, and evaluate a prototype cloud-based artificial intelligence system that supports early cataract detection through smartphone image capture and provides a web-based dashboard for professional monitoring and referral coordination.
+1.4 Objectives of the Study
+1.4.1 General Objective
+To develop a prototype cloud-based AI system consisting of a mobile application (Android) and a web-based administrative dashboard for preliminary cataract screening using smartphone-captured eye images.
+1.4.2 Specific Objectives
+	•	To analyze existing artificial intelligence approaches suitable for cloud-based cataract detection systems, focusing on transfer learning techniques using pre-trained models.
+	•	To design and develop a mobile application for the Android platform that supports eye image capture and secure transmission to a cloud-based AI model.
+	•	To develop a web-based dashboard that enables healthcare professionals to review preliminary screening results and manage referrals.
+	•	To evaluate the usability and effectiveness of the developed prototype system for community-level screening and professional support.
+
+1.5 Scope of the Study
+1.5.1 Geographical Scope
+The study will be conducted within Kampala Capital City and selected peri-urban communities in Wakiso District, specifically targeting areas served by Mengo Hospital and Mulago National Referral Hospital eye care departments. These locations were selected due to their existing eye care infrastructure, high patient volumes during screening camps, and accessibility for system testing and evaluation. The study will focus on communities within a 15-kilometer radius of Kampala city center, including Kasubi, Nateete, Kisenyi, and Bwaise divisions where Village Health Teams (VHTs) are actively operating. This geographical limitation ensures manageable data collection, stakeholder engagement, and system validation.
+
+1.5.2 Content Scope
+The study will focus on the development of a prototype cloud-based cataract detection system consisting of a mobile application for Android users and a web-based administrative dashboard for healthcare professionals. The system will support image capture, cloud-based processing using transfer learning techniques with pre-trained models, result visualization, and referral support.
+The prototype  will not constitute a clinically approved diagnostic tool or replacement for professional medical examination but will leverage existing pre-trained AI models rather than developing complex neural networks from scratch. Mobile development will be limited to the Android platform to ensure focused implementation within project constraints. The AI component will utilize transfer learning approaches rather than training models from scratch . The system will be designed for preliminary screening and educational purposes, not as a hospital-grade diagnostic system.
+1.5.3 Time Scope
+This study will be conducted within the academic period of May to August 2026, covering requirements gathering, system design, prototype development, user testing, and evaluation. Ongoing system maintenance, full organizational deployment, and long-term performance monitoring are beyond the scope of this study period.
+1.6 Significance of the Study
+The developed prototype system is expected to support patients and community health workers by providing accessible mobile screening tools that connect to centralized artificial intelligence services. Healthcare professionals may benefit from the web-based dashboard that supports remote monitoring of screening activities and improves referral coordination. Researchers may use the study as a foundation for further work in cloud-supported medical diagnostic systems. In addition, the study contributes to the growing adoption of digital health technologies that improve accessibility of early disease detection services within resource-limited environments. The prototype demonstrates the feasibility of integrating AI-assisted tools within existing community health frameworks, potentially guiding future investments in digital health infrastructure for Uganda's healthcare system.
+
+
+
+
+
+
+CHAPTER TWO
+
+2.LITERATURE REVIEW
+2.1 Introduction
+
+This chapter reviews existing literature on AI-based cataract detection systems, organized by key system components: cataract prevalence and screening challenges, AI models for smartphone-based detection, existing mobile and web applications, cloud and chatbot integrations, and relevant theoretical frameworks. The review draws from sources published between 2020 and 2026, critically analyzing their findings, limitations, and relevance to developing a dual-platform (mobile-web) AI eye scanning app for early cataract detection in Uganda.
+
+2.2 Cataract Prevalence and Traditional Screening Challenges
+Recent RAAB surveys in Uganda (2023-2025) confirm cataract as the leading cause of blindness (49.4% of bilateral cases in adults 50+), with effective surgical coverage at only 7.3% due to late detection and specialist shortages (fewer than 50 ophthalmologists nationwide). In similar low-resource settings like India, cataracts cause 70% of bilateral blindness affecting 10 million, where ophthalmologist scarcity (12,000 for 1.4 billion) mirrors Uganda's crisis.
+Traditional slit-lamp exams by specialists achieve high accuracy but are impractical for primary screening, as community health workers handle 80% of initial referrals yet lack tools. Studies note smartphone fundus imaging as a bridge, but without AI, manual interpretation yields only 70-80% accuracy by non-experts. These works establish the need for automated tools but overlook Africa-specific adaptations like low-bandwidth optimization, which this study addresses.
+2.3 AI Models and Technologies for Cataract Detection
+Convolutional Neural Networks (CNNs) dominate cataract detection, with transfer learning on MobileNetV2 achieving 92-95% accuracy on fundus images for cataracts and glaucoma. A 2024 study validated a smartphone-captured image model with 90.01% accuracy (sensitivity 89.5%, specificity 89.73%, F1-score 90.36%) using 990 Indian eye images, outperforming novices but matching seniors in screening. Another offline AI system reported 92.02% accuracy (sensitivity 91.36%) on 213 real-world fundus images.
+MobileNet architectures excel for edge deployment due to lightweight depth-wise convolutions, reducing parameters by 9x versus ResNet while maintaining 91%+ accuracy. However, these models train on Asian datasets, showing 5-10% accuracy drops on African skin tones and lighting variations; none integrate multi-disease detection (e.g., retinopathy) for Ugandan comorbidities like diabetes. This study differs by fine-tuning on diverse datasets with hybrid edge-cloud processing.
+
+2.4 Existing Mobile Applications for Eye Disease Screening
+e-Paarvai (India, 2023): An Android app using smartphone cameras for cataract grading (mature/immature/no cataract/IOL), trained on labeled data with high accuracy (89-90% sensitivity/specificity); deployed via NHM for community screening, accelerating referrals. 
+Strengths: No extra hardware; classifies severity. 
+Weaknesses: India-only validation; no multi-disease or chatbot support; requires internet.
+
+Eye Disease Detection App (GitHub, 2025): Web/mobile hybrid for uploading eye images, predicting diseases via CNN; responsive UI with animations. 
+Strengths: Open-source; user-friendly. 
+Weaknesses: Generic model (no cataract focus); lacks professional verification or referrals.
+Regional pilots in Kenya tripled eye care uptake via mobile screening apps, but none are Uganda-specific or dual-platform. These apps validate smartphone feasibility but fail low-resource adaptations (offline mode, Swahili/Luganda UI), gaps this project fills.
+2.5 Web Applications and Professional Diagnostic Tools
+Eye Disease Detection Web App (2025): Allows professionals to upload fundus images for AI predictions; supports desktop/mobile. Strengths: Secure sharing. Weaknesses: No verification workflow; basic UI; unvalidated accuracy.
+Cloud-based platforms like Google's Vertex AI enable web apps for fundus analysis, but examples lack Africa-focused validation or integration with local health maps. Unlike public apps, professional tools need HIPAA-like security, absent in reviewed systems; this study innovates with verified accounts and EHR links.
+2.6 Cloud Integration and AI Chatbots
+Google Cloud (Firebase/Vertex AI) powers scalable eye apps, with Flutter-Gemini chatbots for medical FAQs achieving precise responses under scoped prompts (e.g., "only health queries"). A 2025 tutorial demonstrated Gemini integration for symptom queries, supporting tool-calling for clinic lookups. 
+Strengths: Low-cost scaling. 
+Weaknesses: No eye-specific deployments; hallucination risks without guardrails.
+No reviewed system combines cloud AI detection with Gemini FAQ chatbots and geolocated referrals, critical for Uganda's VHTs.
+
+
+
+
+
+2.7 Conceptual Framework
+
+
+2.9 Research Gaps and Contribution
+Prior studies validate AI cataract apps (90%+ accuracy) but focus on Asia/India, neglecting African validation, multi-disease detection, dual public-professional platforms, offline/low-bandwidth modes, and integrated chatbots/referrals. No Uganda-specific systems exist for university/community screening amid 49.4% cataract blindness rates.
+This study's contribution: A Cloud-based ai app fine-tuned for Ugandan contexts (diverse datasets, local languages, health map integration), filling gaps in scalability, accessibility, and professional workflows to boost early detection by 3x.
+
+
+
+
+
+CHAPTER THREE
+3.METHODOLOGY
+3.1 Introduction
+This chapter presents the research methods and procedures used in the development of the cloud-based artificial intelligence system for early cataract detection. The methodology covers the system development approach, research design, system requirements specification, architecture design, implementation technologies, data collection methods, testing strategies, and ethical considerations. The study adopts an agile development methodology combined with design science research principles to ensure iterative development, stakeholder engagement, and practical validation of the system through real-world testing scenarios.
+3.2 Research Design
+The research adopts a design science research methodology, which focuses on creating and evaluating innovative artifacts (systems, models, or methods) to solve identified organizational problems. This approach is appropriate for system development projects as it emphasizes both the construction of functional systems and the evaluation of their effectiveness in addressing real-world challenges (Peffers et al., 2020). The design science framework consists of six sequential activities: problem identification, definition of objectives, artifact design and development, demonstration, evaluation, and communication of results. The study follows these phases systematically to ensure rigorous development and validation of the cloud-based AI cataract detection system.
+Additionally, the research incorporates agile software development principles to support iterative and incremental system construction. Agile methodologies have proven highly effective for healthcare software development projects, as they enable continuous stakeholder feedback, rapid adaptation to changing requirements, and early delivery of functional modules (Rahman et al., 2024; Ascendle, 2024). The combination of design science and agile approaches ensures both theoretical rigor and practical flexibility throughout the development process.
+3.3 System Development Methodology
+3.3.1 Agile Development Methodology
+The system will be developed using Agile methodology with two-week sprints. This approach is particularly well-suited for AI-enabled mobile health applications as it allows for continuous integration of AI model improvements, iterative testing with stakeholders, and rapid response to regulatory and ethical considerations that emerge during development (Springer, 2026). Agile development in healthcare applications emphasizes close communication with medical professionals, continuous scientific validation, and adherence to regulatory requirements throughout the development lifecycle (Ascendle, 2024).
+The Agile development process for this project will follow these key phases:
+	•	Sprint Planning: Define user stories, prioritize features, and allocate tasks for each two-week sprint based on stakeholder requirements and technical dependencies.
+	•	Daily Stand-ups: Brief coordination sessions to track progress, identify blockers, and ensure alignment between mobile app development, cloud infrastructure setup, and AI model integration.
+	•	Sprint Development: Implement features incrementally, including mobile UI components, cloud API endpoints, database schemas, and AI model inference pipelines.
+	•	Sprint Review and Demonstration: Present working features to stakeholders (healthcare professionals, community health workers) for feedback and validation.
+	•	Sprint Retrospective: Reflect on development process, identify improvements, and adjust subsequent sprint plans accordingly.
+The selection of Agile methodology is justified by several factors specific to this project. First, AI model development requires iterative refinement based on testing results and accuracy evaluations, which aligns with Agile's incremental approach (Patel et al., 2023). Second, healthcare applications demand close collaboration with medical professionals to ensure clinical relevance and usability, which is facilitated by Agile's emphasis on stakeholder engagement (Green, 2023). Third, the dual-platform nature of the system (mobile and web) benefits from parallel development streams that Agile methodology supports through coordinated sprints.
+3.3.2 Integration of AI Development Lifecycle
+The AI model development lifecycle will be integrated within the Agile framework through dedicated sprints focused on data preparation, model training, evaluation, and deployment. This integration addresses the unique challenges of combining traditional software development with machine learning workflows (Springer, 2026). Specific sprints will be allocated for dataset curation and labeling, model architecture selection and fine-tuning, accuracy validation against clinical standards, and optimization for mobile deployment. The AI development process will follow ethical guidelines throughout, including bias mitigation strategies to ensure fair performance across different demographic groups (SAFE-AI Framework, 2026).
+3.4 System Requirements
+3.4.1 Functional Requirements
+The system will provide the following functional capabilities:
+	•	User Registration and Authentication: Secure account creation and login functionality for both public users and healthcare professionals, with role-based access control.
+	•	Eye Image Capture: Mobile application interface that guides users through proper eye image capture using smartphone cameras, with real-time feedback on image quality.
+	•	Cloud-based AI Analysis: Automatic upload of captured images to cloud infrastructure, processing through convolutional neural network models, and return of detection results within 10 seconds.
+	•	Risk Assessment and Grading: Classification of cataract severity levels (normal, mild, moderate, severe) with confidence scores and clinical recommendations.
+	•	Screening History Management: Storage and retrieval of previous screening results, enabling users to track changes over time.
+	•	Referral Generation: Automated generation of referral recommendations to eye care facilities based on detection results.
+	•	Healthcare Professional Dashboard: Web-based interface for verified professionals to review patient screening results, manage referrals, and monitor community screening activities.
+	•	AI Chatbot Integration: Conversational interface powered by generative AI to answer frequently asked questions about cataracts, eye health, and screening procedures.
+	•	Geolocation Services: Integration with maps to help users locate nearby eye care facilities based on their current location.
+	•	Offline Mode Support: Ability to capture images and queue them for upload when internet connectivity is restored, addressing low-bandwidth environments.
+
+3.4.2 Non-Functional Requirements
+The system will meet the following non-functional requirements:
+	•	Security: End-to-end encryption for image transmission, HIPAA-compliant data storage, secure authentication using Firebase Authentication, and protection against unauthorized access.
+	•	Performance: AI model inference time under 10 seconds, mobile app response time under 2 seconds for UI interactions, and support for concurrent processing of multiple screening requests.
+	•	Accuracy: Minimum 90% accuracy for cataract detection based on validation against ophthalmologist-labeled datasets, with sensitivity and specificity metrics meeting clinical acceptability thresholds.
+	•	Usability: Intuitive user interface requiring minimal training, with guided workflows for image capture, multilingual support (English, Luganda), and accessibility features for elderly users.
+	•	Scalability: Cloud infrastructure capable of handling up to 10,000 daily screening requests, with automatic scaling based on demand.
+	•	Reliability: System availability of 99% uptime, with automated backup and disaster recovery mechanisms.
+	•	Compatibility: Mobile applications compatible with Android 8.0+ and iOS 13.0+, with web dashboard supporting modern browsers (Chrome, Firefox, Safari, Edge).
+	•	Maintainability: Modular system architecture enabling independent updates to mobile apps, web dashboard, and AI models without disrupting active users.
+
+3.5 System Architecture and Design
+3.5.1 System Architecture Overview
+The system follows a three-tier cloud-based architecture consisting of presentation layer (mobile and web clients), application layer (cloud services and APIs), and data layer (databases and file storage). This architecture ensures separation of concerns, scalability, and maintainability (TDIT Group, 2026).
+Presentation Layer: The mobile applications (Android and iOS) developed using Flutter framework provide the primary user interface for image capture and screening result viewing. The web-based dashboard developed using React.js provides administrative and professional user interfaces for managing screening activities and reviewing results. Both interfaces communicate with the backend through RESTful APIs and real-time WebSocket connections.
+Application Layer: The backend services hosted on Google Cloud Platform include Firebase Cloud Functions for serverless API endpoints, Firebase Authentication for user management, Firebase AI Logic (Vertex AI) for AI model serving, and custom business logic for screening workflow orchestration. The AI inference pipeline receives eye images from mobile clients, preprocesses them for model input, executes the trained MobileNetV2 model, postprocesses results to generate risk assessments, and returns structured responses to clients.
+Data Layer: Cloud Firestore serves as the primary NoSQL database for storing user profiles, screening records, and system metadata. Cloud Storage for Firebase stores uploaded eye images securely with access controls. The database schema follows a hierarchical structure optimizing for real-time queries and efficient data retrieval patterns required by mobile applications.
+3.6 Tools and Technologies
+3.6.1 Mobile Application Development
+	•	Framework: React-native for cross-platform mobile development supporting both Android and iOS from a single codebase.
+	•	Development Tools: Visual Studio Code as integrated development environment 
+	•	Camera Integration: camera package for accessing device cameras and implementing guided image capture workflows.
+	•	State Management: Provider or Riverpod for application state management and reactive UI updates.
+	•	Firebase SDK: FlutterFire packages for Firebase Authentication, Cloud Firestore, Cloud Storage, and Firebase Cloud Messaging.
+
+3.9 System Testing
+Comprehensive testing will be conducted at multiple levels to ensure system quality, security, and clinical reliability:
+3.9.1 Unit Testing
+Individual system components will be tested in isolation to verify correct functionality. Flutter widgets will be tested using Flutter's testing framework to ensure UI components render correctly and respond to user interactions. Cloud Functions will be unit tested using Node.js testing frameworks (Jest or Mocha) to verify business logic correctness. Database operations will be tested against Firestore emulator to validate query logic and security rules. AI model inference functions will be tested with sample images to ensure consistent output formats.
+3.9.2 Integration Testing
+Integration testing will verify that different system modules work together correctly (Aqua Cloud, 2025). Tests will validate: mobile app to Firebase services communication, image upload to Cloud Storage and subsequent AI processing pipeline, AI model prediction results storage in Firestore, referral generation workflow from detection results to facility recommendations, and synchronization between mobile apps and web dashboard.
+3.9.3 User Acceptance Testing (UAT)
+UAT will be the final validation phase where real end-users validate that the system meets their needs and works as intended in real-world scenarios (Meegle, 2024). UAT participants will include community health workers testing the mobile app, ophthalmologists testing the web dashboard, and patients testing the self-screening functionality.
+3.10 Ethical Considerations
+The study will adhere to strict ethical guidelines to protect participant rights and ensure responsible AI development:
+	•	Informed Consent: All participants in user testing and data collection will provide informed consent after receiving clear information about the study purpose, data usage, and their rights to withdraw.
+	•	Data Privacy: Personal health information will be handled in accordance with data protection regulations. Patient data will be anonymized for AI training purposes. Cloud storage will implement encryption at rest and in transit.
+	•	Confidentiality: User screening records will be accessible only to authorized healthcare professionals. The system will implement role-based access control to protect sensitive medical information.
+	•	AI Ethics: The AI model development will follow ethical AI principles including fairness (testing for bias across demographic groups), transparency (providing explainable predictions), accountability (maintaining audit trails), and safety (implementing confidence thresholds).
+	•	Clinical Disclaimer: The system will clearly communicate that AI predictions are screening tools to support professional diagnosis, not replacements for clinical examination.
+
+
+REFERENCES
+
+	•	Aqua Cloud. (2025). How UAT, system testing & integration testing 
+    ensure software quality. https://aqua-cloud.io/how-uat-system-
+    testing-integration-testing/
+	•	Ascendle. (2024). An agile approach to healthcare's digital 
+    revolution. https://ascendle.com/ideas/an-agile-approach-to-
+    healthcares-digital-revolution/
+	•	Green, T. (2023). Implementing agile in healthcare: Challenges and 
+    solutions. Healthcare IT News.
+	•	Meegle. (2024). User acceptance testing (UAT): A comprehensive 
+    guide. https://www.meegle.com/en_us/topics/software-lifecycle/
+    user-acceptance-testing-uat
+	•	Patel, R., Smith, J., & Johnson, K. (2023). Agile methodologies in 
+    healthcare software development. Journal of Healthcare 
+    Information Management, 37(2), 145-162.
+	•	Peffers, K., Tuunanen, T., Rothenberger, M. A., & Chatterjee, S. 
+    (2020). A design science research methodology for information 
+    systems research. Journal of Management Information Systems, 
+    24(3), 45-77. https://doi.org/10.2753/MIS0742-1222240302
+	•	Rahman, M. H., Hossain, M. D., Uddin, M. K. S., & Hossan, K. M. R. 
+    (2024). Breaking boundaries: Revolutionizing healthcare with 
+    agile methodology. SSRN Electronic Journal. 
+    https://doi.org/10.2139/ssrn.5041524
+	•	Springer Nature. (2026). Agile mobile application development with 
+    integrated artificial intelligence. In M. Kumar & A. Singh 
+    (Eds.), Advances in software engineering (pp. 185-204). 
+    Springer. https://doi.org/10.1007/978-3-032-22375-3_15
+	•	TDIT Group. (2026). Scalable mobile app development for startups 
+    using Flutter, Firebase & AI. https://www.tditgroup.com/post/
+    mobile-app-development-startups-flutter-firebase-ai
+	•	World Health Organization. (2023). World report on vision. WHO 
+Press.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+APPENDIX
+
+APPENDIX A: PROJECT WORK PLAN
+Table A.1: Project Timeline and Activities
+
+Phase
+Activity
+Duration
+Timeline
+Phase 1: Planning & Requirements
+Literature Review
+2 weeks
+May 2026
+
+Requirements Gathering
+1 week
+May 2026
+
+Stakeholder Consultations
+1 week
+May 2026
+Phase 2: Design
+System Architecture Design
+1 week
+May - Jun 2026
+
+Database Schema Design
+1 week
+Jun 2026
+
+UI/UX Mockups
+1 week
+Jun 2026
+
+AI Model Selection
+1 week
+Jun 2026
+Phase 3: Development
+Mobile App Development (Android)
+2 weeks
+Jun 2026
+
+Web Dashboard Development
+2 weeks
+Jun - Jul 2026
+
+Cloud Infrastructure Setup
+1 week
+Jul 2026
+
+AI Model Integration
+1 week
+Jul 2026
+Phase 4: Testing
+Unit Testing
+1 week
+Jul 2026
+
+Integration Testing
+1 week
+Jul 2026
+
+User Acceptance Testing
+1 week
+Jul - Aug 2026
+Phase 5: Deployment & Documentation
+System Deployment
+1 week
+Aug 2026
+
+User Training Materials
+1 week
+Aug 2026
+
+Final Report Writing
+2 weeks
+Aug 2026
+Total Duration
+4 months (16 weeks)
+
+May - August 2026
+
+APPENDIX B: PROJECT BUDGET
+Table B.1: Estimated Project Costs
+Item
+Description
+Unit Cost (UGX)
+Quantity
+Total Cost (UGX)
+HARDWARE REQUIREMENTS
+
+
+
+
+Smartphone (Testing)
+Budget Android device for testing
+350,000
+1
+350,000
+
+
+
+
+
+SOFTWARE & CLOUD SERVICES
+
+
+
+
+Firebase
+Free tier (Spark Plan)
+0
+1
+0
+Google Cloud Platform
+Free tier + credits
+0
+1
+0
+Domain Name
+1 year registration (.com)
+50,000
+1
+50,000
+Development Tools
+VS Code, Android Studio (Free)
+0
+-
+0
+
+
+
+
+
+DATA & CONNECTIVITY
+
+
+
+
+Internet Data Bundle
+Monthly 20GB
+50,000
+4
+200,000
+Mobile Airtime
+Testing communications
+20,000
+4
+80,000
+
+
+
+
+
+RESEARCH & DOCUMENTATION
+
+
+
+
+Stationery
+Printing, binding, paper
+80,000
+1
+80,000
+Transport
+Field visits to facilities
+30,000
+5
+150,000
+Stakeholder Meetings
+Light refreshments
+20,000
+3
+60,000
+
+
+
+
+
+MISCELLANEOUS
+
+
+
+
+Contingency (5%)
+Unexpected expenses
+-
+-
+47,000
+
+
+
+
+
+TOTAL ESTIMATED BUDGET
+
+
+
+967,000
+
+APPENDIX C: SOFTWARE REQUIREMENTS
+Table C.1: Development Software and Tools
+Category
+Tool/Software
+Version
+Purpose
+MOBILE DEVELOPMENT
+
+
+
+Framework
+React Native
+0.72+
+Mobile app framework
+IDE
+Visual Studio Code
+Latest
+Code editor
+Language
+JavaScript/TypeScript
+ES6+
+Programming language
+Package Manager
+npm/Yarn
+Latest
+Dependency management
+
+
+
+
+WEB DEVELOPMENT
+
+
+
+Framework
+React.js
+18.0+
+Frontend framework
+State Management
+Redux/Context API
+Latest
+Application state
+UI Library
+Material-UI
+Latest
+UI components
+Build Tool
+Vite
+Latest
+Build optimization
+
+
+
+
+BACKEND & CLOUD
+
+
+
+Platform
+Firebase
+Latest
+Backend-as-a-Service
+Database
+Cloud Firestore
+Latest
+NoSQL database
+Storage
+Cloud Storage
+Latest
+File storage
+Authentication
+Firebase Auth
+Latest
+User management
+Functions
+Cloud Functions
+Latest
+Serverless computing
+AI/ML
+Vertex AI
+Latest
+AI model hosting
+
+
+
+
+AI/ML DEVELOPMENT
+
+
+
+Framework
+TensorFlow
+2.15+
+ML model development
+Pre-trained Model
+MobileNetV2
+Latest
+Transfer learning base
+Language
+Python
+3.10+
+AI development
+Notebook
+Jupyter Notebook
+Latest
+Model training/testing
+
+
+
+
+VERSION CONTROL
+
+
+
+Git
+Git
+2.40+
+Version control
+Repository
+GitHub
+-
+Code hosting
+CI/CD
+GitHub Actions
+-
+Automated testing
+
+
+
+
+TESTING TOOLS
+
+
+
+Unit Testing
+Jest
+Latest
+JavaScript testing
+E2E Testing
+Detox
+Latest
+Mobile app testing
+API Testing
+Postman
+Latest
+API endpoint testing
+
+APPENDIX D: HARDWARE REQUIREMENTS
+Table D.1: Minimum Hardware Specifications
+Component
+Specification
+Justification
+DEVELOPMENT WORKSTATION
+
+
+Processor
+Intel Core i5 / AMD Ryzen 5
+Adequate for React Native (Student-owned)
+RAM
+16 GB DDR4
+Smooth IDE operation (Student-owned)
+Storage
+512 GB SSD
+Fast file operations (Student-owned)
+OS
+Windows 10/11, macOS 12+, Ubuntu 20.04+
+Development platform
+
+
+
+TESTING DEVICES
+
+
+Android Phone
+Android 8.0+ (API Level 26+)
+Budget device for testing
+RAM (Phone)
+3-4 GB minimum
+App testing
+Storage (Phone)
+32 GB minimum
+Sufficient storage
+Camera
+8MP+ rear camera
+Quality image capture
+Network
+4G LTE / WiFi
+Cloud connectivity
+
+
+
+SERVER (CLOUD)
+
+
+Compute
+Free tier
+Firebase Cloud Functions
+Memory
+Free tier
+API handling
+Storage
+Free tier (5GB)
+Image and database
+Bandwidth
+Free tier (10GB/month)
+Data transfer
+Region
+us-central1
+Firebase free tier location
+
+APPENDIX E: USER ROLES AND PERMISSIONS
+Table E.1: System User Roles
+Role
+Description
+Key Permissions
+Patient/Public User
+General users
+Register, Login, Capture images, View results, Access chatbot
+Community Health Worker
+VHT members
+All Patient permissions + Batch capture, Generate referrals, Offline mode
+Healthcare Professional
+Verified medical staff
+Review all results, Manage referrals, Access dashboard, Generate reports
+System Administrator
+Technical manager
+All permissions + User management, System config, Monitor health
+
+APPENDIX F: INFORMED CONSENT FORM
+INFORMED CONSENT FOR RESEARCH PARTICIPATION
+Design of a Cloud-Based AI Prototype System for Early Cataract Detection
+Principal Investigator: Lukwago Daniel
+Supervisor: Ms. Musiime Phiona
+Purpose: This research aims to design a mobile system for preliminary cataract screening using AI.
+Procedures: You will use the mobile app to capture eye images and provide feedback.
+Risks: Minimal risks. No harmful light emission. Confidentiality maintained.
+Benefits: Free preliminary screening and contribution to healthcare technology.
+Voluntary: Participation is voluntary. You may withdraw anytime.
+I voluntarily agree to participate:
+Participant: ___________________ Signature: ______ Date: ______
+Researcher: Lukwago Daniel  Signature: ______ Date: ______
+
+
+
+
+
+APPENDIX G: SYSTEM API ENDPOINTS
+Table G.1: RESTful API Endpoints
+Endpoint
+Method
+Description
+Auth
+AUTHENTICATION
+
+
+
+/api/auth/register
+POST
+Register new user
+None
+/api/auth/login
+POST
+User login
+None
+/api/auth/logout
+POST
+User logout
+Required
+
+
+
+
+SCREENING
+
+
+
+/api/screening/upload
+POST
+Upload eye image
+Required
+/api/screening/results/:id
+GET
+Get result
+Required
+/api/screening/history
+GET
+Get history
+Required
+
+
+
+
+REFERRAL
+
+
+
+/api/referral/generate
+POST
+Generate referral
+Required
+/api/referral/list
+GET
+List referrals
+Required
+
+
+
+
+FACILITIES
+
+
+
+/api/facilities/nearby
+GET
+Find facilities
+Optional
+
+
+
+
+ADMIN
+
+
+
+/api/admin/users
+GET
+List users
+Admin
+/api/admin/stats
+GET
+Statistics
+Admin
+
+
+
+APPENDIX H: SYSTEM USE CASES
+Table H.1: Primary System Use Cases
+ID
+Use Case
+Actor
+Description
+UC-01
+Register Account
+Patient
+User creates new account
+UC-02
+Login
+All Users
+User authenticates
+UC-03
+Capture Image
+Patient/CHW
+Capture eye photo
+UC-04
+Submit Analysis
+Patient/CHW
+Upload for AI processing
+UC-05
+View Results
+Patient
+View detection results
+UC-06
+Generate Referral
+CHW
+Create referral document
+UC-07
+Find Facilities
+Patient
+Search nearby facilities
+UC-08
+Chat with AI
+Patient
+Ask questions via chatbot
+UC-09
+Review Results
+Professional
+Review submissions
+UC-10
+View Analytics
+Professional
+Access dashboard stats
+APPENDIX I: RISK ASSESSMENT
+Table I.1: Project Risks and Mitigation
+Risk
+Impact
+Probability
+Mitigation Strategy
+Insufficient training data
+High
+Medium
+Use public datasets, collaborate with hospitals
+Low model accuracy
+High
+Medium
+Use pre-trained models, transfer learning
+Cloud costs exceed budget
+Medium
+Low
+Use free tiers, monitor usage
+Internet connectivity issues
+Medium
+High
+Implement offline mode, queue uploads
+User adoption challenges
+Medium
+Medium
+Simple UI, multilingual support, training
+Data privacy concerns
+High
+Low
+Encryption, compliance, anonymization
+Scope creep
+Medium
+High
+Clear scope, regular reviews, agile sprints
+Timeline delays
+Medium
+High
+Buffer time, prioritize core features
+
+
+
+APPENDIX J: USER EVALUATION QUESTIONNAIRE
+ALPHA_EYE Usability Evaluation
+Section A: Participant Information
+1. Age: ☐ 18-30  ☐ 31-45  ☐ 46-60  ☐ 60+
+2. Role: ☐ Patient  ☐ CHW  ☐ Professional
+Section B: Usability (1=Strongly Disagree, 5=Strongly Agree)
+3. The app was easy to navigate.  ☐1  ☐2  ☐3  ☐4  ☐5
+4. Instructions were clear.  ☐1  ☐2  ☐3  ☐4  ☐5
+5. Results were easy to understand.  ☐1  ☐2  ☐3  ☐4  ☐5
+6. System responded quickly.  ☐1  ☐2  ☐3  ☐4  ☐5
+7. I would recommend this app.  ☐1  ☐2  ☐3  ☐4  ☐5
+Section C: Feedback
+8. What did you like most? _______________________________________________
+9. Suggested improvements? ______________________________________________
+Thank you!
+
