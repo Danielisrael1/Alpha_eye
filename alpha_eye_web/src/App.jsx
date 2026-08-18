@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import TopHeader from './components/TopHeader';
 import MetricsOverview from './components/MetricsOverview';
@@ -8,27 +8,57 @@ import NewScanModal from './components/NewScanModal';
 import ReferralManager from './components/ReferralManager';
 import KampalaMap from './components/KampalaMap';
 import AiChatbotDrawer from './components/AiChatbotDrawer';
-import { INITIAL_SCREENINGS } from './services/mockDatabase';
-import { Plus, BrainCircuit, BarChart3, Activity } from 'lucide-react';
+import { fetchScreenings, updateScreening, addScreening } from './services/database';
+import { Plus, BrainCircuit, BarChart3, Activity, Loader2 } from 'lucide-react';
 
 export default function App() {
-  const [screenings, setScreenings] = useState(INITIAL_SCREENINGS);
+  const [screenings, setScreenings] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [isNewScanOpen, setIsNewScanOpen] = useState(false);
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleUpdatePatient = (updatedRecord) => {
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        const data = await fetchScreenings();
+        setScreenings(data);
+      } catch (err) {
+        console.error("Error loading screenings", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  const handleUpdatePatient = async (updatedRecord) => {
+    // Optimistic UI update
     setScreenings((prev) =>
       prev.map((s) => (s.id === updatedRecord.id ? updatedRecord : s))
     );
     setSelectedPatient(updatedRecord);
+    
+    // Background DB update
+    try {
+      await updateScreening(updatedRecord.id, updatedRecord);
+    } catch (err) {
+      console.error('Failed to update in DB', err);
+    }
   };
 
-  const handleAddNewScan = (newRecord) => {
-    setScreenings((prev) => [newRecord, ...prev]);
-    setSelectedPatient(newRecord);
+  const handleAddNewScan = async (newRecord) => {
+    try {
+      const addedRecord = await addScreening(newRecord);
+      const recordToUse = addedRecord || newRecord;
+      setScreenings((prev) => [recordToUse, ...prev]);
+      setSelectedPatient(recordToUse);
+    } catch (err) {
+      console.error('Failed to add in DB', err);
+    }
   };
 
   return (
@@ -56,7 +86,14 @@ export default function App() {
           </button>
         </div>
 
-        {activeTab === 'dashboard' && (
+        {isLoading ? (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 0', color: 'var(--text-muted)' }}>
+            <Loader2 className="lucide-spin" size={32} style={{ marginBottom: 16 }} />
+            <p>Loading screening data securely from Supabase...</p>
+          </div>
+        ) : (
+          <>
+            {activeTab === 'dashboard' && (
           <>
             <MetricsOverview screenings={screenings} />
             <ScreeningQueue
@@ -107,6 +144,8 @@ export default function App() {
               </div>
             </div>
           </div>
+        )}
+        </>
         )}
       </main>
 

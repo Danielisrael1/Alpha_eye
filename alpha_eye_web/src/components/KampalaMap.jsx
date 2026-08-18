@@ -1,9 +1,43 @@
-import React, { useState } from 'react';
-import { EYE_FACILITIES, VHT_OUTREACH_TEAMS } from '../services/mockDatabase';
-import { MapPin, Phone, Mail, ShieldCheck, Users } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { fetchFacilities, fetchVhtTeams } from '../services/database';
+import { MapPin, Phone, Mail, ShieldCheck, Users, Loader2 } from 'lucide-react';
 
 export default function KampalaMap() {
-  const [selectedFacility, setSelectedFacility] = useState(EYE_FACILITIES[0]);
+  const [facilities, setFacilities] = useState([]);
+  const [vhtTeams, setVhtTeams] = useState([]);
+  const [selectedFacility, setSelectedFacility] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        const [facs, teams] = await Promise.all([
+          fetchFacilities(),
+          fetchVhtTeams()
+        ]);
+        setFacilities(facs);
+        setVhtTeams(teams);
+        if (facs.length > 0) {
+          setSelectedFacility(facs[0]);
+        }
+      } catch (err) {
+        console.error('Error loading map data', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '100px 0', color: 'var(--text-muted)' }}>
+        <Loader2 className="lucide-spin" size={32} style={{ marginBottom: 16 }} />
+        <p>Loading network data securely from Supabase...</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 20 }}>
@@ -42,8 +76,8 @@ export default function KampalaMap() {
           </div>
 
           {/* Simulated Facility Map Pins */}
-          {EYE_FACILITIES.map((fac, idx) => {
-            const isSelected = selectedFacility.id === fac.id;
+          {facilities.map((fac, idx) => {
+            const isSelected = selectedFacility?.id === fac.id;
             const topPositions = ['35%', '20%', '55%', '70%'];
             const leftPositions = ['30%', '60%', '45%', '25%'];
             return (
@@ -52,8 +86,8 @@ export default function KampalaMap() {
                 onClick={() => setSelectedFacility(fac)}
                 style={{
                   position: 'absolute',
-                  top: topPositions[idx],
-                  left: leftPositions[idx],
+                  top: topPositions[idx % topPositions.length],
+                  left: leftPositions[idx % leftPositions.length],
                   background: isSelected ? '#2563eb' : '#ffffff',
                   border: isSelected ? '2px solid #ffffff' : '1px solid #2563eb',
                   color: isSelected ? '#ffffff' : '#2563eb',
@@ -79,6 +113,7 @@ export default function KampalaMap() {
         </div>
 
         {/* Selected Facility Details Card */}
+        {selectedFacility && (
         <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: 20 }}>
           <div className="flex-between" style={{ marginBottom: 12 }}>
             <div>
@@ -110,6 +145,7 @@ export default function KampalaMap() {
             </div>
           </div>
         </div>
+        )}
       </div>
 
       {/* Right Column: VHT Outreach Teams Panel */}
@@ -125,7 +161,7 @@ export default function KampalaMap() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {VHT_OUTREACH_TEAMS.map((team, i) => (
+          {vhtTeams.map((team, i) => (
             <div key={i} style={{ border: '1px solid #e2e8f0', borderRadius: 8, padding: 14, background: '#ffffff' }}>
               <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: 2 }}>{team.name}</div>
               <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: 10 }}>
