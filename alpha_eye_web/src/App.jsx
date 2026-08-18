@@ -9,7 +9,7 @@ import ReferralManager from './components/ReferralManager';
 import KampalaMap from './components/KampalaMap';
 import AiChatbotDrawer from './components/AiChatbotDrawer';
 import { fetchScreenings, updateScreening, addScreening } from './services/database';
-import { Plus, BrainCircuit, BarChart3, Activity, Loader2 } from 'lucide-react';
+import { Plus, BrainCircuit, Loader2 } from 'lucide-react';
 
 export default function App() {
   const [screenings, setScreenings] = useState([]);

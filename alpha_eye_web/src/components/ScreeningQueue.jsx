@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronRight, Clock, CheckCircle2, AlertCircle, Filter, Search } from 'lucide-react';
+import { ChevronRight, Clock, CheckCircle2, AlertCircle, Search } from 'lucide-react';
 
 const STAGE_BADGE = {
   NORMAL: 'badge-normal',

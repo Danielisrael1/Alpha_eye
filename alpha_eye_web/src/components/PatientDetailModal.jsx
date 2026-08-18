@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Eye, CheckCircle2, FileText, Printer, ArrowLeft, ShieldCheck, Activity, Award } from 'lucide-react';
+import { X, CheckCircle2, FileText, Printer, ArrowLeft } from 'lucide-react';
 
 const STAGES = {
   NORMAL: { label: 'Normal Lens', badgeClass: 'badge-normal', color: '#059669', desc: 'Clear crystalline lens, no pathological opacities detected.', rec: 'Routine annual eye checkup recommended.' },
@@ -9,13 +9,13 @@ const STAGES = {
 };
 
 export default function PatientDetailModal({ patient, onClose, onUpdatePatient }) {
-  if (!patient) return null;
-
-  const [stage, setStage] = useState(patient.stageKey);
-  const [hospital, setHospital] = useState(patient.assignedHospital || 'Mengo Hospital Eye Dept');
-  const [notes, setNotes] = useState(patient.doctorNotes || '');
+  const [stage, setStage] = useState(patient?.stageKey || 'MODERATE');
+  const [hospital, setHospital] = useState(patient?.assignedHospital || 'Mengo Hospital Eye Dept');
+  const [notes, setNotes] = useState(patient?.doctorNotes || '');
   const [saved, setSaved] = useState(false);
   const [showReferral, setShowReferral] = useState(false);
+
+  if (!patient) return null;
 
   const info = STAGES[stage] || STAGES.MODERATE;
 

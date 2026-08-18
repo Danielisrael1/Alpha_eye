@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { X, Send, BrainCircuit, Stethoscope, BookOpen } from 'lucide-react';
 
 export default function AiChatbotDrawer({ isOpen, onClose }) {
-  if (!isOpen) return null;
-
   const [messages, setMessages] = useState([
     {
       sender: 'bot',
@@ -12,6 +10,8 @@ export default function AiChatbotDrawer({ isOpen, onClose }) {
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+
+  if (!isOpen) return null;
 
   const handleSend = () => {
     if (!input.trim()) return;
