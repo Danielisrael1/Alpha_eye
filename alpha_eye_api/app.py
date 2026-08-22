@@ -1,4 +1,6 @@
 import os
+os.environ["KERAS_BACKEND"] = "tensorflow"
+
 import io
 import time
 import numpy as np
@@ -53,23 +55,18 @@ def load_model_on_start():
     abs_path = os.path.abspath(MODEL_PATH)
     if os.path.exists(abs_path):
         try:
-            import tensorflow as tf
-            print(f"Loading Keras model from {abs_path}...")
+            import keras
+            print(f"Loading Keras 3 model from {abs_path}...")
+            model = keras.saving.load_model(abs_path, compile=False)
+            print("Model successfully loaded with Keras 3!")
+        except Exception as e1:
+            print(f"Keras 3 load failed ({e1}), trying tf.keras...")
             try:
+                import tensorflow as tf
                 model = tf.keras.models.load_model(abs_path, compile=False)
-            except Exception as e1:
-                print(f"tf.keras load_model failed ({e1}), trying compile=True...")
-                model = tf.keras.models.load_model(abs_path)
-            print("Model successfully loaded!")
-        except Exception as e:
-            print(f"Error loading model: {e}")
-            try:
-                import keras
-                print("Attempting load via standalone keras module...")
-                model = keras.models.load_model(abs_path, compile=False)
-                print("Model loaded via standalone keras!")
+                print("Model loaded with tf.keras!")
             except Exception as e2:
-                print(f"Standalone keras load also failed: {e2}")
+                print(f"tf.keras load also failed: {e2}")
     else:
         print(f"Warning: Model file {abs_path} does not exist!")
 
