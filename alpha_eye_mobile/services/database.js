@@ -129,19 +129,53 @@ export const fetchScreenings = async () => {
   }
 };
 
+// Upload local image URI to Supabase Storage bucket 'eye-scans'
+export const uploadEyeImage = async (imageUri, scanId) => {
+  try {
+    if (!imageUri || !imageUri.startsWith('file:')) return imageUri;
+
+    const response = await fetch(imageUri);
+    const blob = await response.blob();
+    const fileName = `${scanId || Date.now()}.jpg`;
+
+    const { error } = await supabase.storage
+      .from('eye-scans')
+      .upload(fileName, blob, { contentType: 'image/jpeg', upsert: true });
+
+    if (error) return imageUri;
+
+    const { data: publicData } = supabase.storage
+      .from('eye-scans')
+      .getPublicUrl(fileName);
+
+    return publicData?.publicUrl || imageUri;
+  } catch (_err) {
+    return imageUri;
+  }
+};
+
 // Add a new screening
 export const addScreening = async (screeningData) => {
   try {
+    const recordToInsert = { ...screeningData };
+
+    // Upload local image to Supabase Storage if needed
+    if (recordToInsert.eyeImageUrl && recordToInsert.eyeImageUrl.startsWith('file:')) {
+      const publicUrl = await uploadEyeImage(recordToInsert.eyeImageUrl, recordToInsert.id);
+      recordToInsert.imageUrl = publicUrl;
+      recordToInsert.eyeImageUrl = publicUrl;
+    }
+
     const { data, error } = await supabase
       .from('screenings')
-      .insert([screeningData])
+      .insert([recordToInsert])
       .select();
 
     if (error) {
-      MOCK_SCREENINGS.unshift(screeningData);
-      return screeningData;
+      MOCK_SCREENINGS.unshift(recordToInsert);
+      return recordToInsert;
     }
-    return data?.[0] || screeningData;
+    return data?.[0] || recordToInsert;
   } catch (_err) {
     MOCK_SCREENINGS.unshift(screeningData);
     return screeningData;

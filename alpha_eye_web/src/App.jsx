@@ -11,6 +11,8 @@ import AiChatbotDrawer from './components/AiChatbotDrawer';
 import { fetchScreenings, updateScreening, addScreening } from './services/database';
 import { Plus, BrainCircuit, Loader2 } from 'lucide-react';
 
+import { supabase } from './services/supabaseClient';
+
 export default function App() {
   const [screenings, setScreenings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,6 +36,33 @@ export default function App() {
       }
     };
     loadData();
+
+    // Live subscription for new scans coming from mobile app
+    const channel = supabase
+      .channel('realtime-screenings')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'screenings' },
+        (payload) => {
+          if (payload.new) {
+            setScreenings((prev) => [payload.new, ...prev.filter((s) => s.id !== payload.new.id)]);
+          }
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'screenings' },
+        (payload) => {
+          if (payload.new) {
+            setScreenings((prev) => prev.map((s) => (s.id === payload.new.id ? payload.new : s)));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const handleUpdatePatient = async (updatedRecord) => {
