@@ -31,7 +31,7 @@ const SUGGESTIONS = [
   'Where can I get surgery?',
 ];
 
-function findBestResponse(input) {
+function findBestResponse(input: string) {
   const lower = input.toLowerCase().trim();
   
   for (const [key, response] of Object.entries(FAQ_RESPONSES)) {
@@ -44,15 +44,21 @@ function findBestResponse(input) {
   const keywords = lower.split(/\s+/);
   for (const [key, response] of Object.entries(FAQ_RESPONSES)) {
     const keyWords = key.split(/\s+/);
-    const matchCount = keywords.filter((w) => keyWords.some((kw) => kw.includes(w) || w.includes(kw))).length;
+    const matchCount = keywords.filter((w: string) => keyWords.some((kw) => kw.includes(w) || w.includes(kw))).length;
     if (matchCount >= 1) return response;
   }
 
   return "I'm not sure about that. I can help with questions about cataracts, symptoms, treatment, prevention, and how Alpha Eye works. Try asking one of those topics!";
 }
 
+interface ChatMessage {
+  id: string;
+  text: string;
+  sender: 'bot' | 'user';
+}
+
 export default function ChatbotScreen() {
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '0',
       text: "Hello! I'm the Alpha Eye AI Health Assistant. I can answer your questions about cataracts, eye health, and how this screening app works. What would you like to know?",
@@ -60,15 +66,15 @@ export default function ChatbotScreen() {
     },
   ]);
   const [input, setInput] = useState('');
-  const flatListRef = useRef(null);
+  const flatListRef = useRef<FlatList>(null);
 
-  const sendMessage = (text) => {
+  const sendMessage = (text?: string) => {
     const messageText = text || input.trim();
     if (!messageText) return;
 
-    const userMsg = { id: Date.now().toString(), text: messageText, sender: 'user' };
+    const userMsg: ChatMessage = { id: Date.now().toString(), text: messageText, sender: 'user' };
     const botResponse = findBestResponse(messageText);
-    const botMsg = { id: (Date.now() + 1).toString(), text: botResponse, sender: 'bot' };
+    const botMsg: ChatMessage = { id: (Date.now() + 1).toString(), text: botResponse, sender: 'bot' };
 
     setMessages((prev) => [...prev, userMsg, botMsg]);
     setInput('');
@@ -78,7 +84,7 @@ export default function ChatbotScreen() {
     }, 100);
   };
 
-  const renderMessage = ({ item }) => {
+  const renderMessage = ({ item }: { item: ChatMessage }) => {
     const isBot = item.sender === 'bot';
     return (
       <View style={[styles.messageRow, isBot ? styles.botRow : styles.userRow]}>
@@ -130,9 +136,9 @@ export default function ChatbotScreen() {
           placeholder="Ask about cataracts, eye health..."
           placeholderTextColor={Colors.textMuted}
           returnKeyType="send"
-          onSubmitEditing={() => sendMessage()}
+          onSubmitEditing={() => sendMessage(input)}
         />
-        <TouchableOpacity style={styles.sendBtn} onPress={() => sendMessage()} disabled={!input.trim()}>
+        <TouchableOpacity style={styles.sendBtn} onPress={() => sendMessage(input)} disabled={!input.trim()}>
           <Ionicons name="send" size={20} color={input.trim() ? '#ffffff' : '#94a3b8'} />
         </TouchableOpacity>
       </View>

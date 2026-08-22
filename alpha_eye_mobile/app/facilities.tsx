@@ -14,7 +14,7 @@ import { Colors, Spacing, FontSizes } from '../constants/Colors';
 import { fetchFacilities } from '../services/database';
 
 export default function FacilitiesScreen() {
-  const [facilities, setFacilities] = useState([]);
+  const [facilities, setFacilities] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -31,11 +31,13 @@ export default function FacilitiesScreen() {
     load();
   }, []);
 
-  const handleCall = (phone) => {
-    Linking.openURL(`tel:${phone.replace(/\s/g, '')}`);
+  const handleCall = (phone: string) => {
+    if (phone) {
+      Linking.openURL(`tel:${phone.replace(/\s/g, '')}`);
+    }
   };
 
-  const handleDirections = (facility) => {
+  const handleDirections = (facility: any) => {
     const coords = facility.coordinates;
     if (coords) {
       const lat = coords.lat;
@@ -44,11 +46,13 @@ export default function FacilitiesScreen() {
         ios: `maps:0,0?q=${lat},${lng}`,
         android: `geo:${lat},${lng}?q=${lat},${lng}(${facility.name})`,
       });
-      Linking.openURL(url);
+      if (url) {
+        Linking.openURL(url);
+      }
     }
   };
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }: { item: any }) => (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
         <View style={styles.categoryBadge}>

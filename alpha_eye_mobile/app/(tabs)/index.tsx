@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   RefreshControl,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, StageColors, Spacing, FontSizes } from '../../constants/Colors';
@@ -14,7 +15,7 @@ import { fetchScreenings } from '../../services/database';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const [screenings, setScreenings] = useState([]);
+  const [screenings, setScreenings] = useState<any[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
   const loadData = async () => {
@@ -48,7 +49,12 @@ export default function HomeScreen() {
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
     >
       {/* Hero Welcome */}
-      <View style={styles.heroCard}>
+      <LinearGradient
+        colors={['#0f172a', '#1e293b', '#0f172a']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.heroCard}
+      >
         <View style={styles.heroIcon}>
           <Ionicons name="eye" size={28} color="#ffffff" />
         </View>
@@ -60,7 +66,7 @@ export default function HomeScreen() {
           <Ionicons name="scan-circle" size={20} color="#ffffff" />
           <Text style={styles.heroBtnText}>Start New Eye Scan</Text>
         </TouchableOpacity>
-      </View>
+      </LinearGradient>
 
       {/* Quick Stats */}
       <Text style={styles.sectionTitle}>Dashboard Overview</Text>
@@ -92,12 +98,18 @@ export default function HomeScreen() {
                 <Text style={styles.latestName}>{latestScan.patientName}</Text>
                 <Text style={styles.latestMeta}>{latestScan.date} · {latestScan.eyeSide}</Text>
               </View>
-              <View style={[styles.badge, { backgroundColor: StageColors[latestScan.stageKey]?.bg || '#f1f5f9' }]}>
-                <View style={[styles.badgeDot, { backgroundColor: StageColors[latestScan.stageKey]?.dot || '#94a3b8' }]} />
-                <Text style={[styles.badgeText, { color: StageColors[latestScan.stageKey]?.text || '#475569' }]}>
-                  {latestScan.diagnosis}
-                </Text>
-              </View>
+              {(() => {
+                const stageKey = (latestScan.stageKey || 'NORMAL') as keyof typeof StageColors;
+                const stageColor = StageColors[stageKey] || StageColors.NORMAL;
+                return (
+                  <View style={[styles.badge, { backgroundColor: stageColor.bg }]}>
+                    <View style={[styles.badgeDot, { backgroundColor: stageColor.dot }]} />
+                    <Text style={[styles.badgeText, { color: stageColor.text }]}>
+                      {latestScan.diagnosis}
+                    </Text>
+                  </View>
+                );
+              })()}
             </View>
             <View style={styles.latestFooter}>
               <Text style={styles.confidenceLabel}>

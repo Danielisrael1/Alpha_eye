@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -15,7 +15,7 @@ import { fetchScreenings } from '../../services/database';
 
 export default function HistoryScreen() {
   const router = useRouter();
-  const [screenings, setScreenings] = useState([]);
+  const [screenings, setScreenings] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -42,8 +42,9 @@ export default function HistoryScreen() {
     setRefreshing(false);
   };
 
-  const renderItem = ({ item }) => {
-    const stageColor = StageColors[item.stageKey] || StageColors.NORMAL;
+  const renderItem = ({ item }: { item: any }) => {
+    const stageKey = (item.stageKey || 'NORMAL') as keyof typeof StageColors;
+    const stageColor = StageColors[stageKey] || StageColors.NORMAL;
 
     return (
       <TouchableOpacity

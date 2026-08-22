@@ -18,6 +18,7 @@ export default function App() {
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [isNewScanOpen, setIsNewScanOpen] = useState(false);
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -36,13 +37,11 @@ export default function App() {
   }, []);
 
   const handleUpdatePatient = async (updatedRecord) => {
-    // Optimistic UI update
     setScreenings((prev) =>
       prev.map((s) => (s.id === updatedRecord.id ? updatedRecord : s))
     );
     setSelectedPatient(updatedRecord);
     
-    // Background DB update
     try {
       await updateScreening(updatedRecord.id, updatedRecord);
     } catch (err) {
@@ -63,7 +62,12 @@ export default function App() {
 
   return (
     <div className="app-layout">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Sidebar 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        isOpen={isSidebarOpen}
+        setIsOpen={setIsSidebarOpen}
+      />
 
       <main className="main-content">
         <TopHeader 
@@ -75,9 +79,10 @@ export default function App() {
           }
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
+          onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         />
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <div className="action-bar">
           <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             Showing active screening data for <strong style={{ color: 'var(--text-main)' }}>Kampala & Wakiso District</strong>
           </div>
@@ -94,58 +99,58 @@ export default function App() {
         ) : (
           <>
             {activeTab === 'dashboard' && (
-          <>
-            <MetricsOverview screenings={screenings} />
-            <ScreeningQueue
-              screenings={screenings}
-              onSelectPatient={(patient) => setSelectedPatient(patient)}
-            />
+              <>
+                <MetricsOverview screenings={screenings} />
+                <ScreeningQueue
+                  screenings={screenings}
+                  onSelectPatient={(patient) => setSelectedPatient(patient)}
+                />
+              </>
+            )}
+
+            {activeTab === 'queue' && (
+              <ScreeningQueue
+                screenings={screenings}
+                onSelectPatient={(patient) => setSelectedPatient(patient)}
+              />
+            )}
+
+            {activeTab === 'referrals' && (
+              <ReferralManager
+                screenings={screenings}
+                onSelectPatient={(patient) => setSelectedPatient(patient)}
+              />
+            )}
+
+            {activeTab === 'facilities' && <KampalaMap />}
+
+            {activeTab === 'stats' && (
+              <div className="card">
+                <div className="card-header">
+                  <div>
+                    <h3>Epidemiological Analytics</h3>
+                    <div className="card-subtitle">Cataract prevalence and screening density by division</div>
+                  </div>
+                </div>
+                <div className="grid-2" style={{ gap: 20 }}>
+                  <div style={{ background: '#f8fafc', padding: 20, borderRadius: 10, border: '1px solid #e2e8f0' }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#475569', textTransform: 'uppercase', marginBottom: 8 }}>
+                      Division Prevalence Distribution
+                    </div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#0f172a' }}>Kasubi & Nateete</div>
+                    <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: 4 }}>Account for 62% of moderate-to-severe cataract findings in field screenings.</div>
+                  </div>
+                  <div style={{ background: '#f8fafc', padding: 20, borderRadius: 10, border: '1px solid #e2e8f0' }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#475569', textTransform: 'uppercase', marginBottom: 8 }}>
+                      Surgical Conversion Rate
+                    </div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#059669' }}>84.2% Verified</div>
+                    <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: 4 }}>Patient referral compliance rate from VHT field triage to Mengo Eye Dept.</div>
+                  </div>
+                </div>
+              </div>
+            )}
           </>
-        )}
-
-        {activeTab === 'queue' && (
-          <ScreeningQueue
-            screenings={screenings}
-            onSelectPatient={(patient) => setSelectedPatient(patient)}
-          />
-        )}
-
-        {activeTab === 'referrals' && (
-          <ReferralManager
-            screenings={screenings}
-            onSelectPatient={(patient) => setSelectedPatient(patient)}
-          />
-        )}
-
-        {activeTab === 'facilities' && <KampalaMap />}
-
-        {activeTab === 'stats' && (
-          <div className="card">
-            <div className="card-header">
-              <div>
-                <h3>Epidemiological Analytics</h3>
-                <div className="card-subtitle">Cataract prevalence and screening density by division</div>
-              </div>
-            </div>
-            <div className="grid-2" style={{ gap: 20 }}>
-              <div style={{ background: '#f8fafc', padding: 20, borderRadius: 10, border: '1px solid #e2e8f0' }}>
-                <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#475569', textTransform: 'uppercase', marginBottom: 8 }}>
-                  Division Prevalence Distribution
-                </div>
-                <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#0f172a' }}>Kasubi & Nateete</div>
-                <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: 4 }}>Account for 62% of moderate-to-severe cataract findings in field screenings.</div>
-              </div>
-              <div style={{ background: '#f8fafc', padding: 20, borderRadius: 10, border: '1px solid #e2e8f0' }}>
-                <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#475569', textTransform: 'uppercase', marginBottom: 8 }}>
-                  Surgical Conversion Rate
-                </div>
-                <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#059669' }}>84.2% Verified</div>
-                <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: 4 }}>Patient referral compliance rate from VHT field triage to Mengo Eye Dept.</div>
-              </div>
-            </div>
-          </div>
-        )}
-        </>
         )}
       </main>
 
@@ -197,4 +202,3 @@ export default function App() {
     </div>
   );
 }
-

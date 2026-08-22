@@ -1,10 +1,22 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, Spacing, FontSizes } from '../../constants/Colors';
 
-const menuItems = [
+import type { ComponentProps } from 'react';
+
+interface MenuItem {
+  title: string;
+  subtitle: string;
+  icon: ComponentProps<typeof Ionicons>['name'];
+  iconBg: string;
+  iconColor: string;
+  route: string;
+}
+
+const menuItems: MenuItem[] = [
   {
     title: 'Find Nearby Eye Clinics',
     subtitle: 'Locate partner hospitals & referral centers',
@@ -37,7 +49,12 @@ export default function ProfileScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {/* App Info Card */}
-      <View style={styles.infoCard}>
+      <LinearGradient
+        colors={['#0f172a', '#1e293b', '#0f172a']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.infoCard}
+      >
         <View style={styles.appIconRow}>
           <View style={styles.appIcon}>
             <Ionicons name="eye" size={24} color="#ffffff" />
@@ -51,7 +68,7 @@ export default function ProfileScreen() {
           Cloud-Based AI System for Early Cataract Detection. Designed for community health workers
           and patients in Kampala & Wakiso District.
         </Text>
-      </View>
+      </LinearGradient>
 
       {/* Menu Items */}
       <Text style={styles.sectionTitle}>Features</Text>
@@ -59,7 +76,7 @@ export default function ProfileScreen() {
         <TouchableOpacity
           key={index}
           style={styles.menuCard}
-          onPress={() => router.push(item.route)}
+          onPress={() => router.push(item.route as any)}
         >
           <View style={[styles.menuIcon, { backgroundColor: item.iconBg }]}>
             <Ionicons name={item.icon} size={22} color={item.iconColor} />

@@ -1,16 +1,21 @@
 import React from 'react';
-import { Search, Bell, ShieldCheck, ChevronRight } from 'lucide-react';
+import { Search, Bell, ShieldCheck, ChevronRight, Menu } from 'lucide-react';
 
-export default function TopHeader({ title, searchTerm, onSearchChange }) {
+export default function TopHeader({ title, searchTerm, onSearchChange, onToggleSidebar }) {
   return (
     <div className="top-header">
       <div className="header-title-container">
-        <div className="breadcrumb">
-          <span>Republic of Uganda MoH</span>
-          <ChevronRight size={12} />
-          <span>Ophthalmic Care</span>
-          <ChevronRight size={12} />
-          <span>Central Division</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+          <button className="mobile-header-toggle" onClick={onToggleSidebar}>
+            <Menu size={20} />
+          </button>
+          <div className="breadcrumb">
+            <span>Republic of Uganda MoH</span>
+            <ChevronRight size={12} />
+            <span>Ophthalmic Care</span>
+            <ChevronRight size={12} />
+            <span>Central Division</span>
+          </div>
         </div>
         <h2>{title}</h2>
       </div>
@@ -45,4 +50,3 @@ export default function TopHeader({ title, searchTerm, onSearchChange }) {
     </div>
   );
 }
-

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
-import { CameraView, useCameraPermissions } from 'expo-camera';
+import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,10 +17,10 @@ import { analyzeEyeScan } from '../../services/aiClassifier';
 
 export default function ScanScreen() {
   const router = useRouter();
-  const cameraRef = useRef(null);
+  const cameraRef = useRef<any>(null);
   const [permission, requestPermission] = useCameraPermissions();
-  const [facing, setFacing] = useState('back');
-  const [capturedImage, setCapturedImage] = useState(null);
+  const [facing, setFacing] = useState<CameraType>('back');
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [eyeSide, setEyeSide] = useState('Right Eye');
 
@@ -56,7 +56,7 @@ export default function ScanScreen() {
       try {
         const photo = await cameraRef.current.takePictureAsync({ quality: 0.8 });
         setCapturedImage(photo.uri);
-      } catch (err) {
+      } catch {
         Alert.alert('Error', 'Failed to capture image. Please try again.');
       }
     }
@@ -85,7 +85,7 @@ export default function ScanScreen() {
         date: new Date().toISOString().split('T')[0] + ' ' + new Date().toTimeString().split(' ')[0].slice(0, 5),
       };
       router.push({ pathname: '/results', params: { scanData: JSON.stringify(scanData) } });
-    } catch (err) {
+    } catch {
       Alert.alert('Analysis Error', 'Failed to analyze the image. Please try again.');
     } finally {
       setIsAnalyzing(false);

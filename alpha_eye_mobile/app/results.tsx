@@ -15,7 +15,8 @@ import { addScreening } from '../services/database';
 export default function ResultsScreen() {
   const router = useRouter();
   const { scanData } = useLocalSearchParams();
-  const result = scanData ? JSON.parse(scanData) : null;
+  const scanDataStr = Array.isArray(scanData) ? scanData[0] : scanData;
+  const result = scanDataStr ? JSON.parse(scanDataStr) : null;
 
   if (!result) {
     return (
@@ -25,7 +26,8 @@ export default function ResultsScreen() {
     );
   }
 
-  const stageColor = StageColors[result.stageKey] || StageColors.NORMAL;
+  const stageKey = (result.stageKey || 'NORMAL') as keyof typeof StageColors;
+  const stageColor = StageColors[stageKey] || StageColors.NORMAL;
   const isSevere = result.stageKey === 'SEVERE' || result.stageKey === 'MODERATE';
 
   const handleSaveToHistory = async () => {
@@ -54,7 +56,7 @@ export default function ResultsScreen() {
         { text: 'View History', onPress: () => router.replace('/(tabs)/history') },
         { text: 'OK' },
       ]);
-    } catch (err) {
+    } catch {
       Alert.alert('Error', 'Failed to save screening. Please check your connection.');
     }
   };
@@ -138,7 +140,7 @@ export default function ResultsScreen() {
   );
 }
 
-function MetricRow({ label, value }) {
+function MetricRow({ label, value }: { label: string; value: string }) {
   return (
     <View style={styles.metricRow}>
       <Text style={styles.metricLabel}>{label}</Text>
