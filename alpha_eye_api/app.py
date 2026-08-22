@@ -50,16 +50,28 @@ STAGE_DETAILS = {
 
 def load_model_on_start():
     global model
-    if os.path.exists(MODEL_PATH):
+    abs_path = os.path.abspath(MODEL_PATH)
+    if os.path.exists(abs_path):
         try:
             import tensorflow as tf
-            print(f"Loading Keras model from {MODEL_PATH}...")
-            model = tf.keras.models.load_model(MODEL_PATH)
+            print(f"Loading Keras model from {abs_path}...")
+            try:
+                model = tf.keras.models.load_model(abs_path, compile=False)
+            except Exception as e1:
+                print(f"tf.keras load_model failed ({e1}), trying compile=True...")
+                model = tf.keras.models.load_model(abs_path)
             print("Model successfully loaded!")
         except Exception as e:
             print(f"Error loading model: {e}")
+            try:
+                import keras
+                print("Attempting load via standalone keras module...")
+                model = keras.models.load_model(abs_path, compile=False)
+                print("Model loaded via standalone keras!")
+            except Exception as e2:
+                print(f"Standalone keras load also failed: {e2}")
     else:
-        print(f"Warning: Model file {MODEL_PATH} not found at startup: {MODEL_PATH}")
+        print(f"Warning: Model file {abs_path} does not exist!")
 
 load_model_on_start()
 
