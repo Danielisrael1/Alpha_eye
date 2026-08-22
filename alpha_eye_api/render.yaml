@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: alpha-eye-api
+    env: docker
+    region: oregon
+    plan: free
+    healthCheckPath: /
