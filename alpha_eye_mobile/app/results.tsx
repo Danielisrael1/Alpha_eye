@@ -35,11 +35,11 @@ export default function ResultsScreen() {
       const record = {
         id: result.id || 'SCR-' + Date.now(),
         patientId: 'UG-FIELD-' + Math.floor(1000 + Math.random() * 9000),
-        patientName: result.patientName || 'Field Screening',
-        age: null,
-        gender: null,
-        location: 'Field Screening — Kampala',
-        vhtName: 'Mobile App User',
+        patientName: result.patientName || 'Anonymous Patient',
+        age: result.age ?? null,
+        gender: result.gender ?? null,
+        location: result.location || 'Kampala District',
+        vhtName: result.vhtName || 'Community Screener',
         date: result.date || new Date().toISOString().split('T')[0],
         eyeSide: result.eyeSide || 'Not specified',
         imageUrl: result.imageUri || '',
@@ -114,7 +114,12 @@ export default function ResultsScreen() {
 
       {/* Scan Info */}
       <View style={styles.sectionCard}>
-        <Text style={styles.sectionTitle}>Scan Information</Text>
+        <Text style={styles.sectionTitle}>Patient & Screening Info</Text>
+        <MetricRow label="Patient Name" value={result.patientName || 'Anonymous'} />
+        {result.age && <MetricRow label="Age" value={`${result.age} yrs`} />}
+        {result.gender && <MetricRow label="Gender" value={result.gender} />}
+        <MetricRow label="Location" value={result.location || 'Kampala District'} />
+        <MetricRow label="VHT / Screener" value={result.vhtName || 'Community Screener'} />
         <MetricRow label="Eye Side" value={result.eyeSide || 'Not specified'} />
         <MetricRow label="Date" value={result.date || result.timestamp || 'N/A'} />
         <MetricRow label="Scan ID" value={result.id || 'N/A'} />

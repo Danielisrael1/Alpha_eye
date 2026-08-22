@@ -7,6 +7,10 @@ import {
   Alert,
   ActivityIndicator,
   Image,
+  TextInput,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
@@ -23,6 +27,13 @@ export default function ScanScreen() {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [eyeSide, setEyeSide] = useState('Right Eye');
+
+  // Patient details state
+  const [patientName, setPatientName] = useState('');
+  const [patientAge, setPatientAge] = useState('');
+  const [patientGender, setPatientGender] = useState<'Female' | 'Male'>('Female');
+  const [patientLocation, setPatientLocation] = useState('');
+  const [vhtName, setVhtName] = useState('');
 
   if (!permission) {
     return (
@@ -81,7 +92,12 @@ export default function ScanScreen() {
       const scanData = {
         ...result,
         eyeSide,
-        patientName: 'Field Screening',
+        patientName: patientName.trim() || 'Anonymous Patient',
+        age: patientAge.trim() ? parseInt(patientAge.trim(), 10) : null,
+        gender: patientGender,
+        location: patientLocation.trim() || 'Kampala District',
+        vhtName: vhtName.trim() || 'Community Screener',
+        imageUri: capturedImage,
         date: new Date().toISOString().split('T')[0] + ' ' + new Date().toTimeString().split(' ')[0].slice(0, 5),
       };
       router.push({ pathname: '/results', params: { scanData: JSON.stringify(scanData) } });
@@ -93,48 +109,116 @@ export default function ScanScreen() {
     }
   };
 
-  // Image preview & analyze screen
+  // Image preview & patient form screen
   if (capturedImage) {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
         <Image source={{ uri: capturedImage }} style={styles.preview} />
         <View style={styles.previewOverlay}>
-          <Text style={styles.previewTitle}>Image Captured</Text>
-          <Text style={styles.previewSubtitle}>Select the eye side and run AI analysis</Text>
+          <ScrollView contentContainerStyle={styles.formScroll} showsVerticalScrollIndicator={false}>
+            <Text style={styles.previewTitle}>Patient & Scan Details</Text>
+            <Text style={styles.previewSubtitle}>Enter patient details before running AI analysis</Text>
 
-          {/* Eye Side Selector */}
-          <View style={styles.eyeSelector}>
-            {['Left Eye', 'Right Eye', 'Both Eyes'].map((side) => (
-              <TouchableOpacity
-                key={side}
-                style={[styles.eyeOption, eyeSide === side && styles.eyeOptionActive]}
-                onPress={() => setEyeSide(side)}
-              >
-                <Text style={[styles.eyeOptionText, eyeSide === side && styles.eyeOptionTextActive]}>
-                  {side}
+            {/* Patient Name */}
+            <Text style={styles.fieldLabel}>Patient Full Name</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="e.g. Nakitende Florence"
+              placeholderTextColor="#64748b"
+              value={patientName}
+              onChangeText={setPatientName}
+            />
+
+            {/* Age & Gender Row */}
+            <View style={styles.formRow}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.fieldLabel}>Age</Text>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="e.g. 58"
+                  placeholderTextColor="#64748b"
+                  keyboardType="numeric"
+                  value={patientAge}
+                  onChangeText={setPatientAge}
+                />
+              </View>
+
+              <View style={{ flex: 1 }}>
+                <Text style={styles.fieldLabel}>Gender</Text>
+                <View style={styles.genderContainer}>
+                  {(['Female', 'Male'] as const).map((g) => (
+                    <TouchableOpacity
+                      key={g}
+                      style={[styles.genderBtn, patientGender === g && styles.genderBtnActive]}
+                      onPress={() => setPatientGender(g)}
+                    >
+                      <Text style={[styles.genderBtnText, patientGender === g && styles.genderBtnTextActive]}>
+                        {g}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+            </View>
+
+            {/* Location */}
+            <Text style={styles.fieldLabel}>Location / Division</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="e.g. Kasubi Division, Kampala"
+              placeholderTextColor="#64748b"
+              value={patientLocation}
+              onChangeText={setPatientLocation}
+            />
+
+            {/* VHT Screener Name */}
+            <Text style={styles.fieldLabel}>VHT / Screener Name</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="e.g. Kiyimba Ronald (VHT #14)"
+              placeholderTextColor="#64748b"
+              value={vhtName}
+              onChangeText={setVhtName}
+            />
+
+            {/* Eye Side Selector */}
+            <Text style={styles.fieldLabel}>Eye Scanned</Text>
+            <View style={styles.eyeSelector}>
+              {['Left Eye', 'Right Eye', 'Both Eyes'].map((side) => (
+                <TouchableOpacity
+                  key={side}
+                  style={[styles.eyeOption, eyeSide === side && styles.eyeOptionActive]}
+                  onPress={() => setEyeSide(side)}
+                >
+                  <Text style={[styles.eyeOptionText, eyeSide === side && styles.eyeOptionTextActive]}>
+                    {side}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <View style={styles.previewActions}>
+              <TouchableOpacity style={styles.retakeBtn} onPress={() => setCapturedImage(null)}>
+                <Ionicons name="refresh" size={20} color={Colors.textPrimary} />
+                <Text style={styles.retakeBtnText}>Retake</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.analyzeBtn} onPress={runAnalysis} disabled={isAnalyzing}>
+                {isAnalyzing ? (
+                  <ActivityIndicator color="#ffffff" size="small" />
+                ) : (
+                  <Ionicons name="pulse" size={20} color="#ffffff" />
+                )}
+                <Text style={styles.analyzeBtnText}>
+                  {isAnalyzing ? 'Analyzing...' : 'Run AI Analysis'}
                 </Text>
               </TouchableOpacity>
-            ))}
-          </View>
-
-          <View style={styles.previewActions}>
-            <TouchableOpacity style={styles.retakeBtn} onPress={() => setCapturedImage(null)}>
-              <Ionicons name="refresh" size={20} color={Colors.textPrimary} />
-              <Text style={styles.retakeBtnText}>Retake</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.analyzeBtn} onPress={runAnalysis} disabled={isAnalyzing}>
-              {isAnalyzing ? (
-                <ActivityIndicator color="#ffffff" size="small" />
-              ) : (
-                <Ionicons name="pulse" size={20} color="#ffffff" />
-              )}
-              <Text style={styles.analyzeBtnText}>
-                {isAnalyzing ? 'Analyzing...' : 'Run AI Analysis'}
-              </Text>
-            </TouchableOpacity>
-          </View>
+            </View>
+          </ScrollView>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 
@@ -233,21 +317,48 @@ const styles = StyleSheet.create({
   // Preview & Analysis
   previewOverlay: {
     position: 'absolute', bottom: 0, left: 0, right: 0,
-    backgroundColor: 'rgba(0,0,0,0.85)',
+    maxHeight: '80%',
+    backgroundColor: 'rgba(15, 23, 42, 0.95)',
     borderTopLeftRadius: 24, borderTopRightRadius: 24,
-    padding: Spacing.xxl, paddingBottom: 48,
+    padding: Spacing.lg, paddingBottom: 32,
   },
+  formScroll: { paddingBottom: 16 },
   previewTitle: { fontSize: FontSizes.xl, fontWeight: '700', color: '#ffffff', marginBottom: 4 },
-  previewSubtitle: { fontSize: FontSizes.sm, color: '#94a3b8', marginBottom: Spacing.xl },
-  eyeSelector: { flexDirection: 'row', gap: Spacing.sm, marginBottom: Spacing.xl },
+  previewSubtitle: { fontSize: FontSizes.sm, color: '#94a3b8', marginBottom: Spacing.md },
+  fieldLabel: { fontSize: FontSizes.xs, fontWeight: '700', color: '#cbd5e1', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 },
+  textInput: {
+    backgroundColor: '#1e293b',
+    borderRadius: 10,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: 10,
+    fontSize: FontSizes.sm,
+    color: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#334155',
+    marginBottom: Spacing.sm,
+  },
+  formRow: { flexDirection: 'row', gap: Spacing.md },
+  genderContainer: { flexDirection: 'row', gap: Spacing.xs, height: 40 },
+  genderBtn: {
+    flex: 1,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#475569',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  genderBtnActive: { borderColor: Colors.primary, backgroundColor: 'rgba(37, 99, 235, 0.25)' },
+  genderBtnText: { color: '#94a3b8', fontSize: FontSizes.xs, fontWeight: '600' },
+  genderBtnTextActive: { color: '#ffffff', fontWeight: '700' },
+  eyeSelector: { flexDirection: 'row', gap: Spacing.sm, marginBottom: Spacing.lg, marginTop: 4 },
   eyeOption: {
     flex: 1, paddingVertical: Spacing.sm, borderRadius: 10,
     borderWidth: 1, borderColor: '#475569', alignItems: 'center',
   },
-  eyeOptionActive: { borderColor: Colors.primary, backgroundColor: 'rgba(37, 99, 235, 0.15)' },
+  eyeOptionActive: { borderColor: Colors.primary, backgroundColor: 'rgba(37, 99, 235, 0.25)' },
   eyeOptionText: { color: '#94a3b8', fontSize: FontSizes.sm, fontWeight: '600' },
-  eyeOptionTextActive: { color: Colors.primary },
-  previewActions: { flexDirection: 'row', gap: Spacing.md },
+  eyeOptionTextActive: { color: '#ffffff', fontWeight: '700' },
+  previewActions: { flexDirection: 'row', gap: Spacing.md, marginTop: Spacing.sm },
   retakeBtn: {
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
     backgroundColor: '#f1f5f9', paddingVertical: 14, borderRadius: 12,
