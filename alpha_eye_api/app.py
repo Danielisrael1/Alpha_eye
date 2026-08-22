@@ -14,6 +14,7 @@ CORS(app)
 # Load trained model
 MODEL_PATH = os.getenv("MODEL_PATH", "best_odir_model.keras")
 model = None
+load_error = None
 
 # Class labels (4 classes: Mild, Moderate, Normal, Severe)
 CLASSES = ['Mild Cataract', 'Moderate Cataract', 'Normal Eye', 'Severe / Mature Cataract']
@@ -51,7 +52,7 @@ STAGE_DETAILS = {
 }
 
 def load_model_on_start():
-    global model
+    global model, load_error
     abs_path = os.path.abspath(MODEL_PATH)
     if os.path.exists(abs_path):
         try:
@@ -59,16 +60,20 @@ def load_model_on_start():
             print(f"Loading Keras 3 model from {abs_path}...")
             model = keras.saving.load_model(abs_path, compile=False)
             print("Model successfully loaded with Keras 3!")
+            load_error = None
         except Exception as e1:
             print(f"Keras 3 load failed ({e1}), trying tf.keras...")
             try:
                 import tensorflow as tf
                 model = tf.keras.models.load_model(abs_path, compile=False)
                 print("Model loaded with tf.keras!")
+                load_error = None
             except Exception as e2:
                 print(f"tf.keras load also failed: {e2}")
+                load_error = f"Keras3 err: {e1} | tf.keras err: {e2}"
     else:
-        print(f"Warning: Model file {abs_path} does not exist!")
+        load_error = f"Model file not found at {abs_path}"
+        print(f"Warning: {load_error}")
 
 load_model_on_start()
 
@@ -77,7 +82,8 @@ def health_check():
     return jsonify({
         "status": "online",
         "service": "Alpha Eye Cataract Classification AI API",
-        "model_loaded": model is not None
+        "model_loaded": model is not None,
+        "load_error": load_error
     })
 
 @app.route("/predict", methods=["POST"])
@@ -99,12 +105,15 @@ def predict():
     try:
         start_time = time.time()
         
-        # Load and preprocess image (224x224 RGB)
-        image_bytes = file.read()
-        image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        # Load and preprocess image (224x224 RGB, MobileNetV2 scale [-1, 1])
+        try:
+            image_bytes = file.read()
+            image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        except Exception:
+            return jsonify({"error": "Invalid or unreadable image file format"}), 400
+
         image = image.resize((224, 224))
-        
-        img_array = np.array(image, dtype=np.float32) / 255.0
+        img_array = (np.array(image, dtype=np.float32) / 127.5) - 1.0
         img_array = np.expand_dims(img_array, axis=0)
 
         # Run model inference
