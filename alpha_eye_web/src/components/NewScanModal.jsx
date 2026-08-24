@@ -57,7 +57,7 @@ export default function NewScanModal({ onClose, onAddNewScan }) {
 
         <div style={{ marginBottom: 20 }}>
           <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: 10 }}>
-            <Eye color="#2563eb" size={22} /> New Field Screening Encounter
+            <Eye color="var(--color-brand)" size={22} /> New Field Screening Encounter
           </h2>
           <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: 2 }}>
             Upload anterior eye photo for automated MobileNetV2 cataract grading and triage.
@@ -100,7 +100,7 @@ export default function NewScanModal({ onClose, onAddNewScan }) {
 
           {/* Photo & AI Analysis */}
           <div>
-            <div style={{ borderRadius: 10, overflow: 'hidden', height: 170, position: 'relative', marginBottom: 14, border: '1px solid #cbd5e1', background: '#f8fafc' }}>
+            <div style={{ borderRadius: 10, overflow: 'hidden', height: 170, position: 'relative', marginBottom: 14, background: 'var(--bg-muted)' }}>
               <img src={preview} alt="Eye preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <label style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: 'rgba(15, 23, 42, 0.4)', color: '#fff', transition: 'background 0.15s ease' }}>
                 <Upload size={24} />
@@ -114,7 +114,7 @@ export default function NewScanModal({ onClose, onAddNewScan }) {
                 <Eye size={16} /> {analyzing ? 'Processing Classifier...' : 'Run MobileNetV2 Diagnostic AI'}
               </button>
             ) : (
-              <div style={{ border: '1px solid #cbd5e1', borderRadius: 10, padding: 14, background: '#f8fafc' }}>
+              <div style={{ borderRadius: 10, padding: 14, background: 'var(--bg-muted)' }}>
                 <div className="flex-between" style={{ marginBottom: 6 }}>
                   <span className={`badge badge-${result.stageKey.toLowerCase()}`}>{result.diagnosis}</span>
                   <span style={{ fontWeight: 700, fontSize: '0.85rem' }}>{result.confidenceScore}% Confidence</span>

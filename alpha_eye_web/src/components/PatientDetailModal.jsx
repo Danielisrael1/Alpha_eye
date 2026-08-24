@@ -41,14 +41,14 @@ export default function PatientDetailModal({ patient, onClose, onUpdatePatient }
               </button>
             </div>
             <div className="referral-doc">
-              <div style={{ textAlign: 'center', borderBottom: '2px solid #0f172a', paddingBottom: 16, marginBottom: 24 }}>
-                <div style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#475569' }}>
+              <div style={{ textAlign: 'center', paddingBottom: 16, marginBottom: 24 }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
                   REPUBLIC OF UGANDA · MINISTRY OF HEALTH
                 </div>
-                <h2 style={{ fontSize: '1.35rem', color: '#0f172a', margin: '4px 0', fontWeight: 700 }}>
+                <h2 style={{ fontSize: '1.35rem', color: 'var(--color-dark-deep)', margin: '4px 0', fontWeight: 700 }}>
                   NATIONAL OPHTHALMIC REFERRAL NOTICE
                 </h2>
-                <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
                   Community Cataract Screening Network · Kampala & Wakiso District
                 </p>
               </div>
@@ -66,38 +66,38 @@ export default function PatientDetailModal({ patient, onClose, onUpdatePatient }
                 </div>
               </div>
 
-              <div style={{ background: '#f8fafc', padding: 14, borderRadius: 8, marginBottom: 20, border: '1px solid #e2e8f0', fontSize: '0.88rem' }}>
+              <div style={{ background: 'var(--bg-muted)', padding: 14, borderRadius: 8, marginBottom: 20, fontSize: '0.88rem' }}>
                 <strong>PATIENT IDENTITY:</strong> {patient.patientName} &nbsp;|&nbsp; <span style={{ fontFamily: 'monospace' }}>{patient.patientId}</span> &nbsp;|&nbsp; {patient.age} Yrs ({patient.gender}) &nbsp;|&nbsp; Affected: <strong>{patient.eyeSide}</strong>
               </div>
 
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.86rem', marginBottom: 24 }}>
                 <tbody>
-                  <tr style={{ background: '#f8fafc' }}>
-                    <td style={{ padding: '10px 14px', border: '1px solid #cbd5e1', width: '30%', fontWeight: 700 }}>AI Classification</td>
-                    <td style={{ padding: '10px 14px', border: '1px solid #cbd5e1', color: info.color, fontWeight: 700 }}>
+                  <tr style={{ background: 'var(--bg-muted)' }}>
+                    <td style={{ padding: '10px 14px', width: '30%', fontWeight: 700 }}>AI Classification</td>
+                    <td style={{ padding: '10px 14px', color: info.color, fontWeight: 700 }}>
                       {info.label} ({patient.confidenceScore}% Model Confidence)
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: '10px 14px', border: '1px solid #cbd5e1', fontWeight: 700 }}>Diagnostic Finding</td>
-                    <td style={{ padding: '10px 14px', border: '1px solid #cbd5e1' }}>{info.desc}</td>
+                    <td style={{ padding: '10px 14px', fontWeight: 700 }}>Diagnostic Finding</td>
+                    <td style={{ padding: '10px 14px' }}>{info.desc}</td>
                   </tr>
-                  <tr style={{ background: '#f8fafc' }}>
-                    <td style={{ padding: '10px 14px', border: '1px solid #cbd5e1', fontWeight: 700 }}>Clinician Notes</td>
-                    <td style={{ padding: '10px 14px', border: '1px solid #cbd5e1' }}>{notes || 'Priority ophthalmic evaluation and surgical consult recommended.'}</td>
+                  <tr style={{ background: 'var(--bg-muted)' }}>
+                    <td style={{ padding: '10px 14px', fontWeight: 700 }}>Clinician Notes</td>
+                    <td style={{ padding: '10px 14px' }}>{notes || 'Priority ophthalmic evaluation and surgical consult recommended.'}</td>
                   </tr>
                 </tbody>
               </table>
 
-              <div style={{ borderTop: '1px dashed #cbd5e1', paddingTop: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+              <div style={{ paddingTop: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <div>
-                  <p style={{ fontSize: '0.75rem', color: '#64748b', margin: 0 }}>AUTHORIZING OPHTHALMOLOGIST SIGNATURE</p>
-                  <div style={{ borderBottom: '1.5px solid #0f172a', width: 200, marginTop: 24 }} />
-                  <p style={{ fontSize: '0.75rem', fontWeight: 700, margin: '4px 0 0 0', color: '#0f172a' }}>Dr. Musiime Phionah, MD</p>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0 }}>AUTHORIZING OPHTHALMOLOGIST SIGNATURE</p>
+                  <div style={{ borderBottom: '2px solid var(--color-dark-deep)', width: 200, marginTop: 24 }} />
+                  <p style={{ fontSize: '0.75rem', fontWeight: 700, margin: '4px 0 0 0', color: 'var(--color-dark-deep)' }}>Dr. Musiime Phionah, MD</p>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <p style={{ fontSize: '0.75rem', color: '#64748b', margin: 0 }}>MOH DIGITAL VERIFICATION HASH</p>
-                  <p style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.85rem', color: '#2563eb', margin: '4px 0 0 0' }}>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0 }}>MOH DIGITAL VERIFICATION HASH</p>
+                  <p style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.85rem', color: 'var(--color-brand)', margin: '4px 0 0 0' }}>
                     AE-2026-UG-MOH-{patient.id.replace('SCR-', '')}
                   </p>
                 </div>
@@ -107,8 +107,8 @@ export default function PatientDetailModal({ patient, onClose, onUpdatePatient }
         ) : (
           <>
             {/* Modal Header */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24, paddingBottom: 18, borderBottom: '1px solid #e2e8f0' }}>
-              <img src={patient.imageUrl} alt="" style={{ width: 52, height: 52, borderRadius: '50%', objectFit: 'cover', border: '2px solid #e2e8f0' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24, paddingBottom: 18 }}>
+              <img src={patient.imageUrl} alt="" style={{ width: 52, height: 52, borderRadius: '50%', objectFit: 'cover' }} />
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>{patient.patientName}</h2>
@@ -135,7 +135,7 @@ export default function PatientDetailModal({ patient, onClose, onUpdatePatient }
                   </span>
                 </div>
 
-                <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid #cbd5e1', marginBottom: 14, position: 'relative', background: '#000' }}>
+                <div style={{ borderRadius: 10, overflow: 'hidden', marginBottom: 14, position: 'relative', background: '#000' }}>
                   <img src={patient.eyeImageUrl} alt="Eye Scan" style={{ width: '100%', height: 250, objectFit: 'cover', display: 'block', opacity: 0.95 }} />
                   <div style={{ position: 'absolute', top: 10, left: 10, background: 'rgba(15, 23, 42, 0.75)', color: '#fff', padding: '4px 8px', borderRadius: 4, fontSize: '0.7rem', fontFamily: 'var(--font-mono)' }}>
                     MobileNetV2 ROI Grid Active
@@ -143,11 +143,11 @@ export default function PatientDetailModal({ patient, onClose, onUpdatePatient }
                 </div>
 
                 <div className="grid-2" style={{ gap: 10 }}>
-                  <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8, border: '1px solid #e2e8f0', fontSize: '0.8rem' }}>
+                  <div style={{ background: 'var(--bg-muted)', padding: 12, borderRadius: 8, fontSize: '0.8rem' }}>
                     <div style={{ color: 'var(--text-subtle)', fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase' }}>Field Collector</div>
                     <div style={{ fontWeight: 600, color: 'var(--text-main)', marginTop: 2 }}>{patient.vhtName}</div>
                   </div>
-                  <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8, border: '1px solid #e2e8f0', fontSize: '0.8rem' }}>
+                  <div style={{ background: 'var(--bg-muted)', padding: 12, borderRadius: 8, fontSize: '0.8rem' }}>
                     <div style={{ color: 'var(--text-subtle)', fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase' }}>Capture Timestamp</div>
                     <div style={{ fontWeight: 600, color: 'var(--text-main)', marginTop: 2 }}>{patient.date}</div>
                   </div>
@@ -158,13 +158,13 @@ export default function PatientDetailModal({ patient, onClose, onUpdatePatient }
               <div>
                 <label className="form-label">Neural Network Quantitative Output</label>
                 
-                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: 16, borderRadius: 10, marginBottom: 18 }}>
+                <div style={{ background: 'var(--bg-muted)', padding: 16, borderRadius: 10, marginBottom: 18 }}>
                   <div className="flex-between" style={{ fontSize: '0.78rem', marginBottom: 6 }}>
                     <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>Classification Confidence</span>
                     <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>{patient.confidenceScore}% Score</span>
                   </div>
                   <div className="progress-bar">
-                    <div className="progress-fill" style={{ width: `${patient.confidenceScore}%`, background: '#2563eb' }} />
+                    <div className="progress-fill" style={{ width: `${patient.confidenceScore}%`, background: 'var(--color-brand)' }} />
                   </div>
 
                   <div className="flex-between" style={{ fontSize: '0.78rem', marginTop: 14, marginBottom: 6 }}>

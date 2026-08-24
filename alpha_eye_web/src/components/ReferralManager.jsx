@@ -20,7 +20,7 @@ export default function ReferralManager({ screenings, onSelectPatient }) {
 
   return (
     <div>
-      <div className="flex-between" style={{ marginBottom: 24, paddingBottom: 16, borderBottom: '1px solid #e2e8f0' }}>
+      <div className="flex-between" style={{ marginBottom: 24, paddingBottom: 16 }}>
         <div>
           <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>Ophthalmic Hospital Referral Pipeline</h3>
           <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
@@ -54,7 +54,7 @@ export default function ReferralManager({ screenings, onSelectPatient }) {
                 <img
                   src={patient.imageUrl}
                   alt=""
-                  style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', border: '1px solid #cbd5e1' }}
+                  style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover' }}
                 />
                 <div>
                   <h4 style={{ fontSize: '0.95rem', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>{patient.patientName}</h4>
@@ -63,15 +63,15 @@ export default function ReferralManager({ screenings, onSelectPatient }) {
                     <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{patient.age}y ({patient.gender})</span>
                   </div>
                   <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: '4px 0 0 0', display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <MapPin size={12} color="#64748b" /> {patient.location}
+                    <MapPin size={12} color="var(--text-muted)" /> {patient.location}
                   </p>
                 </div>
               </div>
 
-              <div style={{ background: '#f0f9ff', border: '1px solid #bae6fd', padding: '10px 14px', borderRadius: 8, marginBottom: 16 }}>
-                <div style={{ fontSize: '0.7rem', color: '#0369a1', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Destination Facility</div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0c4a6e', display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
-                  <Building size={14} color="#0284c7" /> {patient.assignedHospital}
+              <div style={{ background: 'var(--bg-muted)', padding: '10px 14px', borderRadius: 8, marginBottom: 16 }}>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Destination Facility</div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
+                  <Building size={14} color="var(--color-brand)" /> {patient.assignedHospital}
                 </div>
               </div>
 

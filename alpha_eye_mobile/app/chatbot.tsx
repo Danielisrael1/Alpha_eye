@@ -162,8 +162,6 @@ const styles = StyleSheet.create({
   botBubble: {
     backgroundColor: Colors.surface,
     borderTopLeftRadius: 4,
-    borderWidth: 1,
-    borderColor: Colors.border,
   },
   userBubble: {
     backgroundColor: Colors.primary,
@@ -176,7 +174,6 @@ const styles = StyleSheet.create({
   suggestionsTitle: { fontSize: FontSizes.sm, color: Colors.textMuted, fontWeight: '600', marginBottom: Spacing.sm },
   suggestionChip: {
     backgroundColor: Colors.surface,
-    borderWidth: 1, borderColor: Colors.border,
     paddingHorizontal: Spacing.md, paddingVertical: Spacing.sm,
     borderRadius: 10, marginBottom: Spacing.sm,
   },
@@ -187,8 +184,6 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     paddingBottom: Platform.OS === 'ios' ? Spacing.xxl : Spacing.md,
     backgroundColor: Colors.surface,
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
     gap: Spacing.sm,
   },
   input: {
@@ -199,8 +194,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     fontSize: FontSizes.md,
     color: Colors.textPrimary,
-    borderWidth: 1,
-    borderColor: Colors.border,
   },
   sendBtn: {
     width: 44, height: 44, borderRadius: 12,

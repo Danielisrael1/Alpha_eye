@@ -43,7 +43,7 @@ export default function AiChatbotDrawer({ isOpen, onClose }) {
       {/* Header */}
       <div className="chatbot-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 34, height: 34, borderRadius: 8, background: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: 34, height: 34, borderRadius: 8, background: 'var(--color-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <BrainCircuit size={20} color="#ffffff" />
           </div>
           <div>
@@ -74,7 +74,7 @@ export default function AiChatbotDrawer({ isOpen, onClose }) {
       </div>
 
       {/* Quick Clinical Prompts */}
-      <div style={{ padding: '8px 12px', borderTop: '1px solid #e2e8f0', background: '#ffffff', display: 'flex', gap: 6, overflowX: 'auto' }}>
+      <div style={{ padding: '8px 12px', background: 'var(--bg-surface)', display: 'flex', gap: 6, overflowX: 'auto' }}>
         {['Mengo Protocol', 'Luganda Phrases', 'WHO Staging'].map((tag) => (
           <button
             key={tag}
@@ -82,9 +82,9 @@ export default function AiChatbotDrawer({ isOpen, onClose }) {
             style={{
               padding: '4px 10px',
               borderRadius: 6,
-              background: '#f1f5f9',
-              border: '1px solid #cbd5e1',
-              color: '#475569',
+              background: 'var(--bg-muted)',
+              border: 'none',
+              color: 'var(--text-secondary)',
               fontSize: '0.72rem',
               fontWeight: 600,
               whiteSpace: 'nowrap',

@@ -4,42 +4,42 @@
  */
 
 export const Colors = {
-  primary: '#2563eb',
-  primaryDark: '#1d4ed8',
-  primaryLight: '#dbeafe',
+  primary: '#0D9488',
+  primaryDark: '#0F766E',
+  primaryLight: '#CCFBF1',
   
-  success: '#10b981',
-  successLight: '#d1fae5',
+  success: '#10B981',
+  successLight: '#ECFDF5',
   
-  warning: '#f59e0b',
-  warningLight: '#fef3c7',
+  warning: '#D97706',
+  warningLight: '#FFFBEB',
   
-  danger: '#ef4444',
-  dangerLight: '#fee2e2',
+  danger: '#DC2626',
+  dangerLight: '#FEF2F2',
   
-  info: '#0ea5e9',
-  infoLight: '#e0f2fe',
+  info: '#3B82F6',
+  infoLight: '#EFF6FF',
   
-  background: '#f8fafc',
-  surface: '#ffffff',
-  surfaceAlt: '#f1f5f9',
+  background: '#F9FAFB',
+  surface: '#FFFFFF',
+  surfaceAlt: '#F3F4F6',
   
-  textPrimary: '#0f172a',
-  textSecondary: '#475569',
-  textMuted: '#94a3b8',
+  textPrimary: '#1E293B',
+  textSecondary: '#374151',
+  textMuted: '#9CA3AF',
   
-  border: '#e2e8f0',
-  borderLight: '#f1f5f9',
+  border: 'transparent',
+  borderLight: 'transparent',
   
-  dark: '#0f172a',
-  darkAlt: '#1e293b',
+  dark: '#1E293B',
+  darkAlt: '#0F172A',
 };
 
 export const StageColors = {
-  NORMAL: { bg: '#d1fae5', text: '#065f46', dot: '#10b981' },
-  MILD: { bg: '#e0f2fe', text: '#075985', dot: '#0ea5e9' },
-  MODERATE: { bg: '#fef3c7', text: '#92400e', dot: '#f59e0b' },
-  SEVERE: { bg: '#fee2e2', text: '#991b1b', dot: '#ef4444' },
+  NORMAL: { bg: '#ECFDF5', text: '#065F46', dot: '#10B981' },
+  MILD: { bg: '#EFF6FF', text: '#1E40AF', dot: '#3B82F6' },
+  MODERATE: { bg: '#FFFBEB', text: '#92400E', dot: '#D97706' },
+  SEVERE: { bg: '#FEF2F2', text: '#991B1B', dot: '#DC2626' },
 };
 
 export const Spacing = {

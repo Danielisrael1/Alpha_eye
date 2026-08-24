@@ -33,7 +33,7 @@ export default function TopHeader({ title, searchTerm, onSearchChange, onToggleS
         </div>
 
         <div className="user-profile">
-          <button style={{ background: 'none', border: '1px solid #cbd5e1', borderRadius: 8, padding: 7, cursor: 'pointer', color: '#475569', position: 'relative' }}>
+          <button style={{ background: 'var(--bg-muted)', border: 'none', borderRadius: 8, padding: 7, cursor: 'pointer', color: 'var(--text-secondary)', position: 'relative' }}>
             <Bell size={18} />
             <span style={{ position: 'absolute', top: 4, right: 4, width: 7, height: 7, borderRadius: '50%', background: '#dc2626' }} />
           </button>

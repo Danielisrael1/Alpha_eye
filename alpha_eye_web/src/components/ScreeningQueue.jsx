@@ -100,7 +100,7 @@ export default function ScreeningQueue({ screenings, onSelectPatient }) {
                       <img
                         src={s.imageUrl}
                         alt=""
-                        style={{ width: 38, height: 38, borderRadius: '50%', objectFit: 'cover', border: '1px solid #cbd5e1' }}
+                        style={{ width: 38, height: 38, borderRadius: '50%', objectFit: 'cover' }}
                       />
                       <div>
                         <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>{s.patientName}</div>
@@ -134,7 +134,7 @@ export default function ScreeningQueue({ screenings, onSelectPatient }) {
                           className="progress-fill"
                           style={{
                             width: `${s.confidenceScore}%`,
-                            background: s.confidenceScore > 95 ? '#059669' : s.confidenceScore > 90 ? '#2563eb' : '#d97706'
+                            background: 'var(--color-brand)'
                           }}
                         />
                       </div>

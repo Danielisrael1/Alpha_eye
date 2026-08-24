@@ -63,16 +63,13 @@ export default function KampalaMap() {
             height: 360,
             borderRadius: 12,
             overflow: 'hidden',
-            background: '#f1f5f9',
-            border: '1px solid #cbd5e1',
-            marginBottom: 24,
-            backgroundImage: 'radial-gradient(circle at 50% 50%, #cbd5e1 1px, transparent 1px)',
-            backgroundSize: '24px 24px'
+            background: 'var(--bg-muted)',
+            marginBottom: 24
           }}
         >
           {/* Map Grid overlay */}
-          <div style={{ position: 'absolute', top: 12, left: 12, background: 'rgba(255, 255, 255, 0.95)', padding: '6px 12px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.75rem', color: 'var(--text-muted)', boxShadow: 'var(--shadow-xs)' }}>
-            <span style={{ color: '#2563eb', fontWeight: 700 }}>Coverage Zones:</span> Kasubi · Nateete · Kisenyi · Bwaise · Wakiso
+          <div style={{ position: 'absolute', top: 12, left: 12, background: 'var(--bg-surface)', padding: '6px 12px', borderRadius: 6, fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            <span style={{ color: 'var(--color-brand)', fontWeight: 700 }}>Coverage Zones:</span> Kasubi · Nateete · Kisenyi · Bwaise · Wakiso
           </div>
 
           {/* Simulated Facility Map Pins */}
@@ -88,24 +85,23 @@ export default function KampalaMap() {
                   position: 'absolute',
                   top: topPositions[idx % topPositions.length],
                   left: leftPositions[idx % leftPositions.length],
-                  background: isSelected ? '#2563eb' : '#ffffff',
-                  border: isSelected ? '2px solid #ffffff' : '1px solid #2563eb',
-                  color: isSelected ? '#ffffff' : '#2563eb',
+                  background: isSelected ? 'var(--color-brand)' : 'var(--bg-surface)',
+                  border: 'none',
+                  color: isSelected ? '#ffffff' : 'var(--color-brand)',
                   padding: '6px 12px',
                   borderRadius: 20,
                   fontSize: '0.75rem',
                   fontWeight: 700,
                   cursor: 'pointer',
-                  boxShadow: 'var(--shadow-md)',
                   transform: 'translate(-50%, -50%)',
-                  transition: 'all 0.15s ease',
+                  transition: 'background 0.15s ease',
                   display: 'flex',
                   alignItems: 'center',
                   gap: 6,
                   zIndex: isSelected ? 10 : 1
                 }}
               >
-                <MapPin size={14} color={isSelected ? '#ffffff' : '#2563eb'} />
+                <MapPin size={14} color={isSelected ? '#ffffff' : 'var(--color-brand)'} />
                 {fac.name.split(' ')[0]}
               </button>
             );
@@ -114,10 +110,10 @@ export default function KampalaMap() {
 
         {/* Selected Facility Details Card */}
         {selectedFacility && (
-        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: 20 }}>
+        <div style={{ background: 'var(--bg-muted)', borderRadius: 10, padding: 20 }}>
           <div className="flex-between" style={{ marginBottom: 12 }}>
             <div>
-              <span style={{ fontSize: '0.7rem', color: '#2563eb', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <span style={{ fontSize: '0.7rem', color: 'var(--color-brand)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 {selectedFacility.category}
               </span>
               <h4 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '2px 0 0 0', color: 'var(--text-main)' }}>
@@ -132,13 +128,13 @@ export default function KampalaMap() {
 
           <div className="grid-2" style={{ fontSize: '0.82rem', marginTop: 16 }}>
             <div style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <MapPin size={16} color="#64748b" /> {selectedFacility.location} ({selectedFacility.distance})
+              <MapPin size={16} color="var(--text-muted)" /> {selectedFacility.location} ({selectedFacility.distance})
             </div>
             <div style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Phone size={16} color="#64748b" /> {selectedFacility.phone}
+              <Phone size={16} color="var(--text-muted)" /> {selectedFacility.phone}
             </div>
             <div style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Mail size={16} color="#64748b" /> {selectedFacility.email}
+              <Mail size={16} color="var(--text-muted)" /> {selectedFacility.email}
             </div>
             <div style={{ color: 'var(--text-main)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
               <ShieldCheck size={16} color="#059669" /> Surgical Capacity: {selectedFacility.surgicalCapacity}
@@ -150,8 +146,8 @@ export default function KampalaMap() {
 
       {/* Right Column: VHT Outreach Teams Panel */}
       <div className="card">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, paddingBottom: 14, borderBottom: '1px solid #e2e8f0' }}>
-          <div style={{ width: 36, height: 36, borderRadius: 8, background: '#f0f9ff', color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, paddingBottom: 14 }}>
+          <div style={{ width: 36, height: 36, borderRadius: 8, background: 'var(--color-brand-muted)', color: 'var(--color-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Users size={18} />
           </div>
           <div>
@@ -162,16 +158,16 @@ export default function KampalaMap() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {vhtTeams.map((team, i) => (
-            <div key={i} style={{ border: '1px solid #e2e8f0', borderRadius: 8, padding: 14, background: '#ffffff' }}>
+            <div key={i} style={{ borderRadius: 8, padding: 14, background: 'var(--bg-muted)' }}>
               <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: 2 }}>{team.name}</div>
               <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: 10 }}>
                 Lead: {team.leader}
               </div>
               <div className="flex-between" style={{ fontSize: '0.78rem' }}>
-                <span style={{ color: '#0369a1', fontWeight: 600, background: '#f0f9ff', padding: '3px 8px', borderRadius: 4, border: '1px solid #bae6fd' }}>
+                <span style={{ color: 'var(--color-brand)', fontWeight: 600, background: 'var(--color-brand-muted)', padding: '3px 8px', borderRadius: 4 }}>
                   {team.activeScans} Scans
                 </span>
-                <span style={{ color: '#b91c1c', fontWeight: 600, background: '#fef2f2', padding: '3px 8px', borderRadius: 4, border: '1px solid #fecaca' }}>
+                <span style={{ color: '#b91c1c', fontWeight: 600, background: 'var(--status-severe-bg)', padding: '3px 8px', borderRadius: 4 }}>
                   {team.severeCases} Severe
                 </span>
               </div>

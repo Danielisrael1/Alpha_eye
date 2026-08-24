@@ -162,19 +162,19 @@ export default function App() {
                   </div>
                 </div>
                 <div className="grid-2" style={{ gap: 20 }}>
-                  <div style={{ background: '#f8fafc', padding: 20, borderRadius: 10, border: '1px solid #e2e8f0' }}>
-                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#475569', textTransform: 'uppercase', marginBottom: 8 }}>
+                  <div style={{ background: 'var(--bg-muted)', padding: 20, borderRadius: 10 }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>
                       Division Prevalence Distribution
                     </div>
-                    <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#0f172a' }}>Kasubi & Nateete</div>
-                    <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: 4 }}>Account for 62% of moderate-to-severe cataract findings in field screenings.</div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>Kasubi & Nateete</div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: 4 }}>Account for 62% of moderate-to-severe cataract findings in field screenings.</div>
                   </div>
-                  <div style={{ background: '#f8fafc', padding: 20, borderRadius: 10, border: '1px solid #e2e8f0' }}>
-                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#475569', textTransform: 'uppercase', marginBottom: 8 }}>
+                  <div style={{ background: 'var(--bg-muted)', padding: 20, borderRadius: 10 }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>
                       Surgical Conversion Rate
                     </div>
                     <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#059669' }}>84.2% Verified</div>
-                    <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: 4 }}>Patient referral compliance rate from VHT field triage to Mengo Eye Dept.</div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: 4 }}>Patient referral compliance rate from VHT field triage to Mengo Eye Dept.</div>
                   </div>
                 </div>
               </div>
@@ -205,10 +205,9 @@ export default function App() {
           right: 24,
           padding: '10px 18px',
           borderRadius: 30,
-          background: '#0f172a',
+          background: 'var(--color-dark-deep)',
           color: '#ffffff',
-          border: '1px solid #1e293b',
-          boxShadow: 'var(--shadow-lg)',
+          border: 'none',
           cursor: 'pointer',
           zIndex: 550,
           display: 'flex',
@@ -217,10 +216,10 @@ export default function App() {
           fontSize: '0.82rem',
           fontWeight: 600,
           fontFamily: 'var(--font-sans)',
-          transition: 'all 0.15s ease'
+          transition: 'background 0.15s ease'
         }}
       >
-        <BrainCircuit size={18} color="#3b82f6" />
+        <BrainCircuit size={18} color="var(--color-brand)" />
         <span>Clinical AI Assistant</span>
       </button>
 

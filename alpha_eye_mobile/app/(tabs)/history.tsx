@@ -135,11 +135,6 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     padding: Spacing.lg,
     marginBottom: Spacing.md,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 1,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -169,8 +164,6 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
     marginTop: Spacing.md,
     paddingTop: Spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: Colors.borderLight,
   },
   statusBadge: {
     paddingHorizontal: Spacing.sm,

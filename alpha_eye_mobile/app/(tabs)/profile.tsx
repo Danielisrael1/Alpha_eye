@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, Spacing, FontSizes } from '../../constants/Colors';
@@ -21,7 +20,7 @@ const menuItems: MenuItem[] = [
     title: 'Find Nearby Eye Clinics',
     subtitle: 'Locate partner hospitals & referral centers',
     icon: 'location',
-    iconBg: '#dbeafe',
+    iconBg: Colors.primaryLight,
     iconColor: Colors.primary,
     route: '/facilities',
   },
@@ -29,16 +28,16 @@ const menuItems: MenuItem[] = [
     title: 'AI Health Assistant',
     subtitle: 'Ask questions about cataracts & eye health',
     icon: 'chatbubbles',
-    iconBg: '#f3e8ff',
-    iconColor: '#7c3aed',
+    iconBg: Colors.primaryLight,
+    iconColor: Colors.primary,
     route: '/chatbot',
   },
   {
     title: 'Screening History',
     subtitle: 'View all past screening results',
     icon: 'time',
-    iconBg: '#d1fae5',
-    iconColor: Colors.success,
+    iconBg: Colors.primaryLight,
+    iconColor: Colors.primary,
     route: '/(tabs)/history',
   },
 ];
@@ -49,26 +48,21 @@ export default function ProfileScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {/* App Info Card */}
-      <LinearGradient
-        colors={['#0f172a', '#1e293b', '#0f172a']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.infoCard}
-      >
+      <View style={styles.infoCard}>
         <View style={styles.appIconRow}>
           <View style={styles.appIcon}>
             <Ionicons name="eye" size={24} color="#ffffff" />
           </View>
           <View>
             <Text style={styles.appName}>Alpha Eye</Text>
-            <Text style={styles.appVersion}>v1.0.0 — Prototype Build</Text>
+            <Text style={styles.appVersion}>v1.0.0 Prototype Build</Text>
           </View>
         </View>
         <Text style={styles.appDesc}>
           Cloud-Based AI System for Early Cataract Detection. Designed for community health workers
           and patients in Kampala & Wakiso District.
         </Text>
-      </LinearGradient>
+      </View>
 
       {/* Menu Items */}
       <Text style={styles.sectionTitle}>Features</Text>
@@ -94,7 +88,7 @@ export default function ProfileScreen() {
       <View style={styles.aboutCard}>
         <View style={styles.aboutRow}>
           <Text style={styles.aboutLabel}>Project</Text>
-          <Text style={styles.aboutValue}>BSc. Computer Science — Final Year</Text>
+          <Text style={styles.aboutValue}>BSc Computer Science Final Year</Text>
         </View>
         <View style={styles.aboutDivider} />
         <View style={styles.aboutRow}>
@@ -168,11 +162,6 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     padding: Spacing.lg,
     marginBottom: Spacing.sm,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 1,
   },
   menuIcon: {
     width: 44,
@@ -190,11 +179,6 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     padding: Spacing.lg,
     marginBottom: Spacing.xl,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 1,
   },
   aboutRow: {
     flexDirection: 'row',
@@ -202,7 +186,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: Spacing.sm,
   },
-  aboutDivider: { height: 1, backgroundColor: Colors.borderLight },
+  aboutDivider: { height: 1, backgroundColor: Colors.surfaceAlt },
   aboutLabel: { fontSize: FontSizes.sm, color: Colors.textMuted, fontWeight: '600' },
   aboutValue: { fontSize: FontSizes.sm, color: Colors.textPrimary, fontWeight: '600', textAlign: 'right', flex: 1, marginLeft: Spacing.lg },
   disclaimer: {
@@ -212,8 +196,6 @@ const styles = StyleSheet.create({
     padding: Spacing.lg,
     backgroundColor: '#fefce8',
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#fef08a',
   },
   disclaimerText: { flex: 1, fontSize: FontSizes.xs, color: '#92400e', lineHeight: 18 },
 });

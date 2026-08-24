@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   RefreshControl,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, StageColors, Spacing, FontSizes } from '../../constants/Colors';
@@ -49,12 +48,7 @@ export default function HomeScreen() {
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
     >
       {/* Hero Welcome */}
-      <LinearGradient
-        colors={['#0f172a', '#1e293b', '#0f172a']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.heroCard}
-      >
+      <View style={styles.heroCard}>
         <View style={styles.heroIcon}>
           <Ionicons name="eye" size={28} color="#ffffff" />
         </View>
@@ -66,20 +60,20 @@ export default function HomeScreen() {
           <Ionicons name="scan-circle" size={20} color="#ffffff" />
           <Text style={styles.heroBtnText}>Start New Eye Scan</Text>
         </TouchableOpacity>
-      </LinearGradient>
+      </View>
 
       {/* Quick Stats */}
       <Text style={styles.sectionTitle}>Dashboard Overview</Text>
       <View style={styles.statsRow}>
-        <View style={[styles.statCard, { borderLeftColor: Colors.primary }]}>
+        <View style={styles.statCard}>
           <Text style={styles.statValue}>{totalScans}</Text>
           <Text style={styles.statLabel}>Total Scans</Text>
         </View>
-        <View style={[styles.statCard, { borderLeftColor: Colors.warning }]}>
+        <View style={styles.statCard}>
           <Text style={styles.statValue}>{pendingCount}</Text>
           <Text style={styles.statLabel}>Pending</Text>
         </View>
-        <View style={[styles.statCard, { borderLeftColor: Colors.danger }]}>
+        <View style={styles.statCard}>
           <Text style={styles.statValue}>{severeCount}</Text>
           <Text style={styles.statLabel}>Severe</Text>
         </View>
@@ -125,20 +119,20 @@ export default function HomeScreen() {
       <Text style={styles.sectionTitle}>Quick Actions</Text>
       <View style={styles.actionsGrid}>
         <TouchableOpacity style={styles.actionCard} onPress={() => router.push('/facilities')}>
-          <View style={[styles.actionIcon, { backgroundColor: '#dbeafe' }]}>
+          <View style={styles.actionIcon}>
             <Ionicons name="location" size={22} color={Colors.primary} />
           </View>
           <Text style={styles.actionLabel}>Find Clinics</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionCard} onPress={() => router.push('/chatbot')}>
-          <View style={[styles.actionIcon, { backgroundColor: '#f3e8ff' }]}>
-            <Ionicons name="chatbubbles" size={22} color="#7c3aed" />
+          <View style={styles.actionIcon}>
+            <Ionicons name="chatbubbles" size={22} color={Colors.primary} />
           </View>
           <Text style={styles.actionLabel}>AI Chatbot</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionCard} onPress={() => router.push('/(tabs)/history')}>
-          <View style={[styles.actionIcon, { backgroundColor: '#d1fae5' }]}>
-            <Ionicons name="time" size={22} color={Colors.success} />
+          <View style={styles.actionIcon}>
+            <Ionicons name="time" size={22} color={Colors.primary} />
           </View>
           <Text style={styles.actionLabel}>History</Text>
         </TouchableOpacity>
@@ -211,12 +205,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surface,
     borderRadius: 14,
     padding: Spacing.lg,
-    borderLeftWidth: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 1,
   },
   statValue: {
     fontSize: FontSizes.xxl,
@@ -236,11 +224,6 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     padding: Spacing.lg,
     marginBottom: Spacing.xxl,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 1,
   },
   latestHeader: {
     flexDirection: 'row',
@@ -279,8 +262,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: Colors.borderLight,
     paddingTop: Spacing.md,
   },
   confidenceLabel: {
@@ -301,16 +282,12 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     padding: Spacing.lg,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 1,
   },
   actionIcon: {
     width: 48,
     height: 48,
     borderRadius: 14,
+    backgroundColor: Colors.surfaceAlt,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.sm,

@@ -148,11 +148,6 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     padding: Spacing.lg,
     marginBottom: Spacing.md,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 1,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -161,7 +156,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   categoryBadge: {
-    backgroundColor: '#dbeafe',
+    backgroundColor: Colors.primaryLight,
     paddingHorizontal: Spacing.sm,
     paddingVertical: 3,
     borderRadius: 6,
@@ -182,8 +177,6 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
     marginTop: Spacing.lg,
     paddingTop: Spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: Colors.borderLight,
   },
   callBtn: {
     flex: 1,
@@ -193,8 +186,7 @@ const styles = StyleSheet.create({
     gap: Spacing.xs,
     paddingVertical: 12,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: Colors.primary,
+    backgroundColor: Colors.surfaceAlt,
   },
   callBtnText: { fontSize: FontSizes.sm, fontWeight: '700', color: Colors.primary },
   dirBtn: {
