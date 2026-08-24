@@ -2,6 +2,7 @@ import os
 os.environ["KERAS_BACKEND"] = "tensorflow"
 
 import io
+import logging
 import time
 import numpy as np
 from flask import Flask, request, jsonify
@@ -10,15 +11,23 @@ from PIL import Image
 
 app = Flask(__name__)
 CORS(app)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
+logger = logging.getLogger(__name__)
+
+@app.after_request
+def log_request(response):
+    logger.info('%s %s -> %s', request.method, request.path, response.status_code)
+    return response
 
 # Load trained model
 MODEL_PATH = os.getenv("MODEL_PATH", "best_odir_model.keras")
 model = None
 load_error = None
 
-# Class labels (4 classes: Mild, Moderate, Normal, Severe)
-CLASSES = ['Mild Cataract', 'Moderate Cataract', 'Normal Eye', 'Severe / Mature Cataract']
-STAGE_KEYS = ['MILD', 'MODERATE', 'NORMAL', 'SEVERE']
+# The current trained artifact has three output neurons. Keep the class order
+# aligned with the labels used when this model was configured.
+CLASSES = ['Mild Cataract', 'Moderate Cataract', 'Normal Eye']
+STAGE_KEYS = ['MILD', 'MODERATE', 'NORMAL']
 
 STAGE_DETAILS = {
     'NORMAL': {
@@ -76,6 +85,13 @@ def load_model_on_start():
         print(f"Warning: {load_error}")
 
 load_model_on_start()
+
+if model is not None:
+    output_count = model.output_shape[-1]
+    if output_count != len(STAGE_KEYS):
+        load_error = f"Model returns {output_count} classes, but the API is configured for {len(STAGE_KEYS)}"
+        model = None
+        print(f"Error: {load_error}")
 
 @app.route("/", methods=["GET"])
 def health_check():
