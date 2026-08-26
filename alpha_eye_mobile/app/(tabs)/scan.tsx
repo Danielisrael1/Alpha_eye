@@ -225,6 +225,9 @@ export default function ScanScreen() {
           <TouchableOpacity style={styles.permissionBtn} onPress={requestPermission}>
             <Text style={styles.permissionBtnText}>Grant Camera Access</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.permissionBackBtn} onPress={() => setStep('patient_info')}>
+            <Text style={styles.permissionBackBtnText}>Back to Patient Info</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -453,5 +456,7 @@ const styles = StyleSheet.create({
   permissionTitle: { fontSize: FontSizes.xl, fontWeight: '700', color: Colors.textPrimary, marginBottom: Spacing.sm },
   permissionDesc: { fontSize: FontSizes.md, color: Colors.textSecondary, textAlign: 'center', lineHeight: 22, marginBottom: Spacing.xxl },
   permissionBtn: { backgroundColor: Colors.primary, paddingHorizontal: Spacing.xxl, paddingVertical: Spacing.md, borderRadius: 12 },
-  permissionBtnText: { color: '#ffffff', fontSize: FontSizes.md, fontWeight: '700' },
+  permissionBtnText: { color: '#ffffff', fontSize: FontSizes.md, fontWeight: '700', textAlign: 'center' },
+  permissionBackBtn: { marginTop: Spacing.md, paddingHorizontal: Spacing.xxl, paddingVertical: Spacing.sm },
+  permissionBackBtnText: { color: Colors.textSecondary, fontSize: FontSizes.sm, fontWeight: '600', textAlign: 'center' },
 });

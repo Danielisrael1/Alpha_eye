@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { X, CheckCircle2, FileText, Printer, ArrowLeft } from 'lucide-react';
+import { onImageError } from '../utils/imagePlaceholder';
+import PatientAvatar from './PatientAvatar';
 
 const STAGES = {
   NORMAL: { label: 'Normal Lens', badgeClass: 'badge-normal', color: '#059669', desc: 'Clear crystalline lens, no pathological opacities detected.', rec: 'Routine annual eye checkup recommended.' },
@@ -108,7 +110,7 @@ export default function PatientDetailModal({ patient, onClose, onUpdatePatient }
           <>
             {/* Modal Header */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24, paddingBottom: 18 }}>
-              <img src={patient.imageUrl} alt="" style={{ width: 52, height: 52, borderRadius: '50%', objectFit: 'cover' }} />
+              <PatientAvatar name={patient.patientName} size={52} />
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>{patient.patientName}</h2>
@@ -136,7 +138,7 @@ export default function PatientDetailModal({ patient, onClose, onUpdatePatient }
                 </div>
 
                 <div style={{ borderRadius: 10, overflow: 'hidden', marginBottom: 14, position: 'relative', background: '#000' }}>
-                  <img src={patient.eyeImageUrl} alt="Eye Scan" style={{ width: '100%', height: 250, objectFit: 'cover', display: 'block', opacity: 0.95 }} />
+                  <img src={patient.eyeImageUrl} alt="Eye Scan" onError={onImageError} style={{ width: '100%', height: 250, objectFit: 'cover', display: 'block', opacity: 0.95 }} />
                   <div style={{ position: 'absolute', top: 10, left: 10, background: 'rgba(15, 23, 42, 0.75)', color: '#fff', padding: '4px 8px', borderRadius: 4, fontSize: '0.7rem', fontFamily: 'var(--font-mono)' }}>
                     MobileNetV2 ROI Grid Active
                   </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Calendar, MapPin, Building, Printer, ChevronRight } from 'lucide-react';
+import PatientAvatar from './PatientAvatar';
 
 const STAGE_BADGE = {
   NORMAL: 'badge-normal',
@@ -51,11 +52,7 @@ export default function ReferralManager({ screenings, onSelectPatient }) {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
-                <img
-                  src={patient.imageUrl}
-                  alt=""
-                  style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover' }}
-                />
+                <PatientAvatar name={patient.patientName} size={44} />
                 <div>
                   <h4 style={{ fontSize: '0.95rem', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>{patient.patientName}</h4>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>

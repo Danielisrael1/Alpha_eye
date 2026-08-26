@@ -183,11 +183,14 @@ export default function App() {
         )}
       </main>
 
-      <PatientDetailModal
-        patient={selectedPatient}
-        onClose={() => setSelectedPatient(null)}
-        onUpdatePatient={handleUpdatePatient}
-      />
+      {selectedPatient && (
+        <PatientDetailModal
+          key={selectedPatient.id}
+          patient={selectedPatient}
+          onClose={() => setSelectedPatient(null)}
+          onUpdatePatient={handleUpdatePatient}
+        />
+      )}
 
       {isNewScanOpen && (
         <NewScanModal
@@ -197,7 +200,8 @@ export default function App() {
       )}
 
       {/* Understated Clinical Assistant Floating Toggle Button */}
-      <button 
+      <button
+        className="ai-assistant-toggle"
         onClick={() => setIsChatbotOpen(!isChatbotOpen)}
         style={{
           position: 'fixed',

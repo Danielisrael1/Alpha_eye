@@ -42,7 +42,6 @@ export default function ResultsScreen() {
         vhtName: result.vhtName || 'Community Screener',
         date: result.date || new Date().toISOString().split('T')[0],
         eyeSide: result.eyeSide || 'Not specified',
-        imageUrl: result.imageUri || '',
         eyeImageUrl: result.imageUri || '',
         diagnosis: result.diagnosis,
         stageKey: result.stageKey,

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { X, Upload, Eye, CheckCircle2, ShieldCheck, Activity } from 'lucide-react';
 import { analyzeEyeScan } from '../services/aiClassifier';
+import { uploadEyeImage } from '../services/database';
+import { IMAGE_PLACEHOLDER, onImageError } from '../utils/imagePlaceholder';
 
 export default function NewScanModal({ onClose, onAddNewScan }) {
   const [name, setName] = useState('');
@@ -9,8 +11,9 @@ export default function NewScanModal({ onClose, onAddNewScan }) {
   const [location, setLocation] = useState('Kasubi Division, Kampala');
   const [eyeSide, setEyeSide] = useState('Right Eye');
   const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState('https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=600&q=80');
+  const [preview, setPreview] = useState(IMAGE_PLACEHOLDER);
   const [analyzing, setAnalyzing] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [result, setResult] = useState(null);
   const [analysisError, setAnalysisError] = useState(null);
 
@@ -33,10 +36,21 @@ export default function NewScanModal({ onClose, onAddNewScan }) {
     }
   };
 
-  const save = () => {
+  const save = async () => {
     if (!result) return;
+    setSaving(true);
+    const id = 'SCR-2026-' + Math.floor(100 + Math.random() * 900);
+
+    // preview is a blob: URL when a file was picked - only valid in this
+    // tab, so persist the actual bytes before anyone else can view it.
+    let persistedImageUrl = IMAGE_PLACEHOLDER;
+    if (file) {
+      const uploadedUrl = await uploadEyeImage(file, id);
+      persistedImageUrl = uploadedUrl || IMAGE_PLACEHOLDER;
+    }
+
     onAddNewScan({
-      id: 'SCR-2026-' + Math.floor(100 + Math.random() * 900),
+      id,
       patientId: 'UG-KLA-' + Math.floor(1000 + Math.random() * 9000),
       patientName: name,
       age: parseInt(age) || 50,
@@ -45,8 +59,7 @@ export default function NewScanModal({ onClose, onAddNewScan }) {
       vhtName: 'Direct Clinical Scan',
       date: new Date().toISOString().replace('T', ' ').substring(0, 16),
       eyeSide,
-      imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-      eyeImageUrl: preview,
+      eyeImageUrl: persistedImageUrl,
       diagnosis: result.diagnosis,
       stageKey: result.stageKey,
       confidenceScore: result.confidenceScore,
@@ -54,6 +67,7 @@ export default function NewScanModal({ onClose, onAddNewScan }) {
       doctorNotes: '',
       assignedHospital: 'Mengo Hospital Eye Dept',
     });
+    setSaving(false);
     onClose();
   };
 
@@ -108,7 +122,7 @@ export default function NewScanModal({ onClose, onAddNewScan }) {
           {/* Photo & AI Analysis */}
           <div>
             <div style={{ borderRadius: 10, overflow: 'hidden', height: 170, position: 'relative', marginBottom: 14, background: 'var(--bg-muted)' }}>
-              <img src={preview} alt="Eye preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={preview} alt="Eye preview" onError={onImageError} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <label style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: 'rgba(15, 23, 42, 0.4)', color: '#fff', transition: 'background 0.15s ease' }}>
                 <Upload size={24} />
                 <span style={{ fontSize: '0.78rem', fontWeight: 600, marginTop: 6 }}>Select Eye Photo</span>
@@ -132,8 +146,8 @@ export default function NewScanModal({ onClose, onAddNewScan }) {
                   <span style={{ fontWeight: 700, fontSize: '0.85rem' }}>{result.confidenceScore}% Confidence</span>
                 </div>
                 <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: 12 }}>{result.recommendation}</p>
-                <button className="btn btn-success" style={{ width: '100%', justifyContent: 'center' }} onClick={save}>
-                  <CheckCircle2 size={16} /> Save Record to Screening Queue
+                <button className="btn btn-success" style={{ width: '100%', justifyContent: 'center' }} onClick={save} disabled={saving}>
+                  <CheckCircle2 size={16} /> {saving ? 'Saving...' : 'Save Record to Screening Queue'}
                 </button>
               </div>
             )}

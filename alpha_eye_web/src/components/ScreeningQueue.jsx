@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronRight, Clock, CheckCircle2, AlertCircle, Search } from 'lucide-react';
+import PatientAvatar from './PatientAvatar';
 
 const STAGE_BADGE = {
   NORMAL: 'badge-normal',
@@ -97,11 +98,7 @@ export default function ScreeningQueue({ screenings, onSelectPatient }) {
                 <tr key={s.id} onClick={() => onSelectPatient(s)}>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                      <img
-                        src={s.imageUrl}
-                        alt=""
-                        style={{ width: 38, height: 38, borderRadius: '50%', objectFit: 'cover' }}
-                      />
+                      <PatientAvatar name={s.patientName} />
                       <div>
                         <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>{s.patientName}</div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>

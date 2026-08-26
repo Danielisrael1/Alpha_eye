@@ -1,5 +1,18 @@
 import { supabase } from '../lib/supabase';
 
+// Inline SVG so the fallback never depends on a network request itself.
+// (Several previously-used Unsplash photo IDs here didn't actually depict
+// eyes - a portrait, a fashion photo, a pile of pills.)
+const EYE_PLACEHOLDER =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">' +
+    '<rect width="100" height="100" fill="#e2e8f0"/>' +
+    '<path d="M50 32c-16 0-28 12-33 18 5 6 17 18 33 18s28-12 33-18c-5-6-17-18-33-18z" fill="none" stroke="#94a3b8" stroke-width="4"/>' +
+    '<circle cx="50" cy="50" r="10" fill="#94a3b8"/>' +
+    '</svg>'
+  );
+
 // Fallback initial data for offline mode / network errors
 export const MOCK_SCREENINGS = [
   {
@@ -12,8 +25,7 @@ export const MOCK_SCREENINGS = [
     vhtName: 'Kiyimba Ronald (VHT #14)',
     date: '2026-08-04 10:15',
     eyeSide: 'Right Eye',
-    imageUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80',
-    eyeImageUrl: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=600&q=80',
+    eyeImageUrl: EYE_PLACEHOLDER,
     diagnosis: 'Moderate Cataract',
     stageKey: 'MODERATE',
     confidenceScore: 94.8,
@@ -31,8 +43,7 @@ export const MOCK_SCREENINGS = [
     vhtName: 'Nalumansi Sarah (VHT #09)',
     date: '2026-08-04 09:30',
     eyeSide: 'Left Eye',
-    imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
-    eyeImageUrl: 'https://images.unsplash.com/photo-1516726817505-f5ed825624d8?auto=format&fit=crop&w=600&q=80',
+    eyeImageUrl: EYE_PLACEHOLDER,
     diagnosis: 'Severe / Mature Cataract',
     stageKey: 'SEVERE',
     confidenceScore: 97.2,
@@ -50,8 +61,7 @@ export const MOCK_SCREENINGS = [
     vhtName: 'Kiyimba Ronald (VHT #14)',
     date: '2026-08-03 16:45',
     eyeSide: 'Both Eyes',
-    imageUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80',
-    eyeImageUrl: 'https://images.unsplash.com/photo-1509967419530-da38b4704bc6?auto=format&fit=crop&w=600&q=80',
+    eyeImageUrl: EYE_PLACEHOLDER,
     diagnosis: 'Mild Cataract',
     stageKey: 'MILD',
     confidenceScore: 91.5,
@@ -129,7 +139,10 @@ export const fetchScreenings = async () => {
   }
 };
 
-// Upload local image URI to Supabase Storage bucket 'eye-scans'
+// Upload local image URI to Supabase Storage bucket 'eye-scans'.
+// Returns the public URL, or null if the upload failed - a device-local
+// file: URI must never be returned, since it can't be resolved by any
+// other device/browser that later reads this record.
 export const uploadEyeImage = async (imageUri, scanId) => {
   try {
     if (!imageUri || !imageUri.startsWith('file:')) return imageUri;
@@ -142,15 +155,19 @@ export const uploadEyeImage = async (imageUri, scanId) => {
       .from('eye-scans')
       .upload(fileName, blob, { contentType: 'image/jpeg', upsert: true });
 
-    if (error) return imageUri;
+    if (error) {
+      console.error('Error uploading eye image:', error);
+      return null;
+    }
 
     const { data: publicData } = supabase.storage
       .from('eye-scans')
       .getPublicUrl(fileName);
 
-    return publicData?.publicUrl || imageUri;
-  } catch (_err) {
-    return imageUri;
+    return publicData?.publicUrl || null;
+  } catch (err) {
+    console.error('Error uploading eye image:', err);
+    return null;
   }
 };
 
@@ -162,8 +179,7 @@ export const addScreening = async (screeningData) => {
     // Upload local image to Supabase Storage if needed
     if (recordToInsert.eyeImageUrl && recordToInsert.eyeImageUrl.startsWith('file:')) {
       const publicUrl = await uploadEyeImage(recordToInsert.eyeImageUrl, recordToInsert.id);
-      recordToInsert.imageUrl = publicUrl;
-      recordToInsert.eyeImageUrl = publicUrl;
+      recordToInsert.eyeImageUrl = publicUrl || EYE_PLACEHOLDER;
     }
 
     const { data, error } = await supabase
