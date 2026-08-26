@@ -62,27 +62,27 @@ STAGE_DETAILS = {
 
 def load_model_on_start():
     global model, load_error
-    abs_path = os.path.abspath(MODEL_PATH)
+    abs_path = os.path.abspath(os.path.join(os.path.dirname(__file__), MODEL_PATH)) if not os.path.isabs(MODEL_PATH) else MODEL_PATH
     if os.path.exists(abs_path):
         try:
             import keras
-            print(f"Loading Keras 3 model from {abs_path}...")
+            logger.info("Loading Keras 3 model from %s", abs_path)
             model = keras.saving.load_model(abs_path, compile=False)
-            print("Model successfully loaded with Keras 3!")
+            logger.info("Model successfully loaded with Keras 3")
             load_error = None
         except Exception as e1:
-            print(f"Keras 3 load failed ({e1}), trying tf.keras...")
+            logger.exception("Keras 3 model load failed; trying tf.keras")
             try:
                 import tensorflow as tf
                 model = tf.keras.models.load_model(abs_path, compile=False)
-                print("Model loaded with tf.keras!")
+                logger.info("Model successfully loaded with tf.keras")
                 load_error = None
             except Exception as e2:
-                print(f"tf.keras load also failed: {e2}")
+                logger.exception("tf.keras model load also failed")
                 load_error = f"Keras3 err: {e1} | tf.keras err: {e2}"
     else:
         load_error = f"Model file not found at {abs_path}"
-        print(f"Warning: {load_error}")
+        logger.error(load_error)
 
 load_model_on_start()
 
@@ -95,12 +95,13 @@ if model is not None:
 
 @app.route("/", methods=["GET"])
 def health_check():
-    return jsonify({
+    response = jsonify({
         "status": "online",
         "service": "Alpha Eye Cataract Classification AI API",
         "model_loaded": model is not None,
         "load_error": load_error
     })
+    return response, (200 if model is not None else 503)
 
 @app.route("/predict", methods=["POST"])
 def predict():
