@@ -12,6 +12,7 @@ export default function NewScanModal({ onClose, onAddNewScan }) {
   const [preview, setPreview] = useState('https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=600&q=80');
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState(null);
+  const [analysisError, setAnalysisError] = useState(null);
 
   const handleFile = (e) => {
     const f = e.target.files[0];
@@ -21,9 +22,15 @@ export default function NewScanModal({ onClose, onAddNewScan }) {
   const runAi = async () => {
     if (!name.trim()) return alert('Please enter patient name');
     setAnalyzing(true);
-    const r = await analyzeEyeScan(file || preview);
-    setResult(r);
-    setAnalyzing(false);
+    setAnalysisError(null);
+    try {
+      const r = await analyzeEyeScan(file || preview);
+      setResult(r);
+    } catch (err) {
+      setAnalysisError(err instanceof Error ? err.message : 'Failed to analyze the image. Please try again.');
+    } finally {
+      setAnalyzing(false);
+    }
   };
 
   const save = () => {
@@ -110,9 +117,14 @@ export default function NewScanModal({ onClose, onAddNewScan }) {
             </div>
 
             {!result ? (
-              <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '10px 0' }} onClick={runAi} disabled={analyzing}>
-                <Eye size={16} /> {analyzing ? 'Processing Classifier...' : 'Run MobileNetV2 Diagnostic AI'}
-              </button>
+              <>
+                <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '10px 0' }} onClick={runAi} disabled={analyzing}>
+                  <Eye size={16} /> {analyzing ? 'Processing Classifier (may take up to a minute)...' : 'Run MobileNetV2 Diagnostic AI'}
+                </button>
+                {analysisError && (
+                  <p style={{ fontSize: '0.78rem', color: '#ef4444', marginTop: 8 }}>{analysisError}</p>
+                )}
+              </>
             ) : (
               <div style={{ borderRadius: 10, padding: 14, background: 'var(--bg-muted)' }}>
                 <div className="flex-between" style={{ marginBottom: 6 }}>

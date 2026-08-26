@@ -85,8 +85,8 @@ export default function ScanScreen() {
         date: new Date().toISOString().split('T')[0] + ' ' + new Date().toTimeString().split(' ')[0].slice(0, 5),
       };
       router.push({ pathname: '/results', params: { scanData: JSON.stringify(scanData) } });
-    } catch {
-      Alert.alert('Analysis Error', 'Failed to analyze the image. Please try again.');
+    } catch (err) {
+      Alert.alert('Analysis Error', err instanceof Error ? err.message : 'Failed to analyze the image. Please try again.');
     } finally {
       setIsAnalyzing(false);
       setCapturedImage(null);
@@ -264,7 +264,7 @@ export default function ScanScreen() {
                 <Ionicons name="pulse" size={20} color="#ffffff" />
               )}
               <Text style={styles.analyzeBtnText}>
-                {isAnalyzing ? 'Analyzing...' : 'Run Diagnostic AI'}
+                {isAnalyzing ? 'Analyzing (may take up to a minute)...' : 'Run Diagnostic AI'}
               </Text>
             </TouchableOpacity>
           </View>
