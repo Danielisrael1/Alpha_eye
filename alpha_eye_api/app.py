@@ -1,6 +1,4 @@
 import os
-os.environ["KERAS_BACKEND"] = "tensorflow"
-
 import io
 import logging
 import time
@@ -8,6 +6,7 @@ import numpy as np
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from PIL import Image
+from ai_edge_litert.interpreter import Interpreter
 
 app = Flask(__name__)
 CORS(app)
@@ -20,8 +19,10 @@ def log_request(response):
     return response
 
 # Load trained model
-MODEL_PATH = os.getenv("MODEL_PATH", "best_odir_model.keras")
-model = None
+MODEL_PATH = os.getenv("MODEL_PATH", "best_odir_model.tflite")
+interpreter = None
+input_details = None
+output_details = None
 load_error = None
 
 # The current trained artifact has three output neurons. Keep the class order
@@ -61,36 +62,32 @@ STAGE_DETAILS = {
 }
 
 def load_model_on_start():
-    global model, load_error
+    global interpreter, input_details, output_details, load_error
     abs_path = os.path.abspath(os.path.join(os.path.dirname(__file__), MODEL_PATH)) if not os.path.isabs(MODEL_PATH) else MODEL_PATH
     if os.path.exists(abs_path):
         try:
-            import keras
-            logger.info("Loading Keras 3 model from %s", abs_path)
-            model = keras.saving.load_model(abs_path, compile=False)
-            logger.info("Model successfully loaded with Keras 3")
+            logger.info("Loading TFLite model from %s", abs_path)
+            new_interpreter = Interpreter(model_path=abs_path)
+            new_interpreter.allocate_tensors()
+            interpreter = new_interpreter
+            input_details = interpreter.get_input_details()[0]
+            output_details = interpreter.get_output_details()[0]
+            logger.info("Model successfully loaded with TFLite runtime")
             load_error = None
-        except Exception as e1:
-            logger.exception("Keras 3 model load failed; trying tf.keras")
-            try:
-                import tensorflow as tf
-                model = tf.keras.models.load_model(abs_path, compile=False)
-                logger.info("Model successfully loaded with tf.keras")
-                load_error = None
-            except Exception as e2:
-                logger.exception("tf.keras model load also failed")
-                load_error = f"Keras3 err: {e1} | tf.keras err: {e2}"
+        except Exception as e:
+            logger.exception("TFLite model load failed")
+            load_error = f"TFLite load error: {e}"
     else:
         load_error = f"Model file not found at {abs_path}"
         logger.error(load_error)
 
 load_model_on_start()
 
-if model is not None:
-    output_count = model.output_shape[-1]
+if interpreter is not None:
+    output_count = output_details["shape"][-1]
     if output_count != len(STAGE_KEYS):
         load_error = f"Model returns {output_count} classes, but the API is configured for {len(STAGE_KEYS)}"
-        model = None
+        interpreter = None
         print(f"Error: {load_error}")
 
 @app.route("/", methods=["GET"])
@@ -98,16 +95,16 @@ def health_check():
     response = jsonify({
         "status": "online",
         "service": "Alpha Eye Cataract Classification AI API",
-        "model_loaded": model is not None,
+        "model_loaded": interpreter is not None,
         "load_error": load_error
     })
-    return response, (200 if model is not None else 503)
+    return response, (200 if interpreter is not None else 503)
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    if model is None:
+    if interpreter is None:
         load_model_on_start()
-        if model is None:
+        if interpreter is None:
             return jsonify({"error": "Model not loaded on server. Please verify model path."}), 500
 
     file = None
@@ -134,7 +131,9 @@ def predict():
         img_array = np.expand_dims(img_array, axis=0)
 
         # Run model inference
-        predictions = model.predict(img_array)[0]
+        interpreter.set_tensor(input_details["index"], img_array)
+        interpreter.invoke()
+        predictions = interpreter.get_tensor(output_details["index"])[0]
         predicted_class_idx = int(np.argmax(predictions))
         confidence = float(predictions[predicted_class_idx]) * 100.0
 
