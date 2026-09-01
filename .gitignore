@@ -1,0 +1,10 @@
+.DS_Store
+convert_env/
+new-model/
+*.docx.bak*
+*.bak
+*.bak2
+*.bak3
+*.bak4
+*.bak5
+.~*
